@@ -17,10 +17,14 @@ public partial class Player : CharacterBody2D
 	[Export] public float KnockbackForce = 300.0f;
 	[Export] public float StunDuration = 0.3f;
 
+	[Export] public float DownAttackSpeed = 600.0f;
+	[Export] public float DownAttackBounce = -350.0f;
+
 	public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	// Стан
 	private bool _isAttacking = false;
+	private bool _isDownAttacking = false;
 	private bool _isDead = false;
 	private bool _isInCutscene = false;
 	private bool _isStunned = false;
@@ -30,6 +34,7 @@ public partial class Player : CharacterBody2D
 	// Вузли
 	private AnimatedSprite2D _animatedSprite;
 	private Area2D _swordHitbox; // Це тепер Hitbox (Area2D)
+	private Area2D _swordHitboxDown;
 
 	// Аудіо
 	private AudioStreamPlayer2D _audioWalk;
@@ -41,6 +46,8 @@ public partial class Player : CharacterBody2D
 	{
 		_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_swordHitbox = GetNode<Area2D>("SwordArea"); // Переконайся, що на ньому висить скрипт Hitbox.cs
+		_swordHitboxDown = GetNode<Area2D>("SwordAreaDown");
+		_swordHitboxDown.AreaEntered += OnDownAttackHit;
 		
 		// Аудіо
 		_audioWalk = GetNode<AudioStreamPlayer2D>("Audio_Walk");
@@ -95,6 +102,23 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
+		if (_isDownAttacking)
+		{
+			velocity.Y = DownAttackSpeed;
+			// Можна трохи контролювати рух по X
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * 0.5f * fDelta);
+
+			if (IsOnFloor())
+			{
+				EndDownAttack();
+			}
+
+			Velocity = velocity;
+			MoveAndSlide();
+			return;
+		}
+
+
 		// 4. Рух
 		if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
 		else _jumpCount = 0;
@@ -113,7 +137,17 @@ public partial class Player : CharacterBody2D
 		else
 			 velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
 
-		if (Input.IsActionJustPressed("attack")) StartAttack();
+		if (Input.IsActionJustPressed("attack"))
+		{
+			if (!IsOnFloor() && Input.IsActionPressed("ui_down"))
+			{
+				StartDownAttack();
+			}
+			else
+			{
+				StartAttack();
+			}
+		}
 
 		// Аудіо ходьби
 		if (IsOnFloor() && Mathf.Abs(velocity.X) > 10)
@@ -141,6 +175,7 @@ public partial class Player : CharacterBody2D
 		// Логіка відкидання
 		_stunTimer = StunDuration;
 		_isAttacking = false;
+		_isDownAttacking = false;
 		
 		Vector2 knockbackDir = (GlobalPosition - sourcePos).Normalized();
 		Velocity = new Vector2(knockbackDir.X * KnockbackForce, -200);
@@ -149,7 +184,11 @@ public partial class Player : CharacterBody2D
 	// Цей метод викликається автоматично через Сигнал від HealthComponent
 	private void OnDeath()
 	{
+		if (_isDead) return;
+
 		_isDead = true;
+		_isAttacking = false;
+		_isDownAttacking = false;
 		_animatedSprite.Play("death");
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
 	}
@@ -163,6 +202,46 @@ public partial class Player : CharacterBody2D
 		// Area2D (Hitbox) сам зробить свою справу, коли торкнеться ворога
 		_swordHitbox.Monitoring = true;
 	}
+
+	private void StartDownAttack()
+	{
+		_isDownAttacking = true;
+		_animatedSprite.Play("down");
+		_audioAttack.PitchScale = (float)GD.RandRange(0.8, 1.0);
+		_audioAttack.Play();
+
+		// Вимикаємо звичайний хітбокс, вмикаємо нижній
+		_swordHitbox.Monitoring = false;
+		_swordHitboxDown.Monitoring = true;
+
+		// Скидаємо вертикальну швидкість для початку пікірування
+		Velocity = new Vector2(Velocity.X, 0);
+	}
+
+	private void EndDownAttack()
+	{
+		_isDownAttacking = false;
+		_swordHitboxDown.Monitoring = false;
+		_animatedSprite.Play("idle");
+	}
+
+	// Викликається при влучанні атаки вниз у щось
+	private void OnDownAttackHit(Area2D area)
+	{
+		// Перевіряємо, що це Hurtbox (ворог)
+		if (area is Hurtbox)
+		{
+			// Відскакуємо вгору!
+			Velocity = new Vector2(Velocity.X, DownAttackBounce);
+
+			// Завершуємо атаку вниз
+			EndDownAttack();
+
+			// Скидаємо лічильник стрибків, щоб можна було стрибати знову
+			_jumpCount = 1;
+		}
+	}
+
 
 	// --- Методи для катсцен ---
 	public void ToggleCutscene(bool active)
@@ -180,23 +259,34 @@ public partial class Player : CharacterBody2D
 	// Анімації та OnAnimationFinished залишаються такими ж...
 	private void OnAnimationFinished()
 	{
-		if (_animatedSprite.Animation == "attack") 
-	{ 
-		_isAttacking = false; 
-		_animatedSprite.Play("idle"); 
-		
-		// Вимикаємо зону ураження, щоб не бити, поки стоїмо
-		_swordHitbox.Monitoring = false;
-	}
-		if (_animatedSprite.Animation == "attack") { _isAttacking = false; _animatedSprite.Play("idle"); }
+		if (_animatedSprite.Animation == "attack")
+		{
+			_isAttacking = false;
+			_animatedSprite.Play("idle");
+
+			// Вимикаємо зону ураження, щоб не бити, поки стоїмо
+			_swordHitbox.Monitoring = false;
+		}
 		if (_animatedSprite.Animation == "death") GetTree().ReloadCurrentScene();
 	}
 
 	private void UpdateAnimation(float direction, Vector2 velocity)
 	{
-		if (_isAttacking || _isDead || _isStunned) return;
-		if (direction > 0) { _animatedSprite.FlipH = false; _swordHitbox.Scale = new Vector2(1, 1); }
-		else if (direction < 0) { _animatedSprite.FlipH = true; _swordHitbox.Scale = new Vector2(-1, 1); }
+		if (_isAttacking || _isDownAttacking || _isDead || _isStunned) return;
+		
+		if (direction > 0) 
+		{ 
+			_animatedSprite.FlipH = false; 
+			_swordHitbox.Scale = new Vector2(1, 1); 
+			_swordHitboxDown.Scale = new Vector2(1, 1); 
+		}
+
+		else if (direction < 0) 
+		{ 
+			_animatedSprite.FlipH = true; 
+			_swordHitbox.Scale = new Vector2(-1, 1); 
+			_swordHitboxDown.Scale = new Vector2(-1, 1); 
+		}
 
 		if (IsOnFloor()) { if (Mathf.IsZeroApprox(velocity.X)) _animatedSprite.Play("idle"); else _animatedSprite.Play("run"); }
 		else { if (velocity.Y < 0) _animatedSprite.Play("jump"); }
