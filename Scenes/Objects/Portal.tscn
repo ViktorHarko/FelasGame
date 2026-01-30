@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxme6si4gkjt7"]
+
+[ext_resource type="Script" uid="uid://cr5lnm13v484k" path="res://Scripts/Objects/Portal.cs" id="1_4hdyq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gci8f"]
+size = Vector2(42.5, 255.5)
+
+[node name="Portal" type="Area2D" groups=["Portals"]]
+script = ExtResource("1_4hdyq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Portals"]]
+position = Vector2(1, -1)
+shape = SubResource("RectangleShape2D_gci8f")

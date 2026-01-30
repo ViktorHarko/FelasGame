@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3 uid="uid://bnfxfkwph2554"]
+
+[ext_resource type="Script" uid="uid://2fk5cffm2rwr" path="res://Levels/Room1/Room1.cs" id="1_apjt2"]
+[ext_resource type="AudioStream" uid="uid://dhfs6vxwedb2i" path="res://Audio/forest-wind-and-birds-6881.mp3" id="2_uem0s"]
+[ext_resource type="Texture2D" uid="uid://obuhwmyf4a5c" path="res://test_assets/bg/IMG_5027.jpg" id="3_dwatp"]
+[ext_resource type="PackedScene" uid="uid://cflc5dt0v5qin" path="res://Entities/Player/Player.tscn" id="4_t811k"]
+[ext_resource type="PackedScene" uid="uid://c43hngt101ih6" path="res://Entities/Enemy1/Enemy1.tscn" id="5_j2pj0"]
+[ext_resource type="Texture2D" uid="uid://m77oob33rtdf" path="res://test_assets/bg/door.png" id="6_r5n7h"]
+[ext_resource type="PackedScene" uid="uid://dxme6si4gkjt7" path="res://Scenes/Objects/Portal.tscn" id="7_fglaj"]
+[ext_resource type="AudioStream" uid="uid://cg0hdkldfstdb" path="res://Audio/ambient-game-67014.mp3" id="8_ik2o2"]
+[ext_resource type="Script" uid="uid://dxworlju84pyx" path="res://Scripts/Objects/RandomLoopSound.cs" id="9_q784a"]
+
+[node name="World" type="Node2D" node_paths=PackedStringArray("PlayerNode", "RoomSprite")]
+texture_filter = 1
+script = ExtResource("1_apjt2")
+PlayerNode = NodePath("Player")
+RoomSprite = NodePath("Sprite2D")
+BackgroundMusic = ExtResource("2_uem0s")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.336, 0.343)
+texture = ExtResource("3_dwatp")
+centered = false
+offset = Vector2(1, 1)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Player" parent="." instance=ExtResource("4_t811k")]
+position = Vector2(188, 340)
+
+[node name="Enemy" parent="." instance=ExtResource("5_j2pj0")]
+position = Vector2(556, 342)
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Platforms"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platforms/StaticBody2D"]
+position = Vector2(125.99999, 240.99998)
+scale = Vector2(0.6517058, 0.5006938)
+polygon = PackedVector2Array(21.482101, 267.6287, 213.74475, 262.99707, 387, 261, 385, 386, -24, 378, -21, 23, 21.482101, -113.84201)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Platforms/StaticBody2D"]
+position = Vector2(206, 281)
+scale = Vector2(0.49658233, 0.36922863)
+polygon = PackedVector2Array(647.4782, 256.46515, 661, 370, 1643.232, 379.16882, 1635.1771, -541.66986, 1103.5431, -598.54517, 1127.7083, -181.45941, 1389.4977, -181.45941, 1401.5803, -154.37592, 1490.186, -32.500183, 1492.1997, 265.4182, 1389.4977, 262.70984, 1169.9973, 265.4182, 1138, 265)
+
+[node name="Door" type="Sprite2D" parent="."]
+scale = Vector2(0.336, 0.336)
+texture = ExtResource("6_r5n7h")
+centered = false
+
+[node name="Door_Level1" parent="." instance=ExtResource("7_fglaj")]
+position = Vector2(909.00006, 317)
+scale = Vector2(0.49658233, 0.36922863)
+NextScenePath = "uid://dxv3pdd2s2k20"
+PortalName = "Door_Level1"
+DestinationPortalName = "Door_Level2"
+SpawnOnLeft = true
+
+[node name="RainZone" type="CPUParticles2D" parent="."]
+position = Vector2(473, 0)
+amount = 200
+lifetime = 1.2
+preprocess = 2.0
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(474, 0)
+scale_amount_max = 2.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_ik2o2")
+volume_db = -17.324
+script = ExtResource("9_q784a")

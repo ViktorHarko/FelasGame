@@ -1,0 +1,80 @@
+[gd_scene load_steps=7 format=3 uid="uid://bhncq3nsueg7n"]
+
+[ext_resource type="Script" uid="uid://b2xibxkei57r8" path="res://Scripts/Managers/SceneManager.cs" id="1_yueht"]
+[ext_resource type="AudioStream" uid="uid://cg0hdkldfstdb" path="res://Audio/ambient-game-67014.mp3" id="2_ebsso"]
+
+[sub_resource type="Animation" id="Animation_8bihv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.011764706, 0.011764706, 0.011764706, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_w00xr"]
+resource_name = "fade_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.011764706, 0.011764706, 0.011764706, 1), Color(0.011764706, 0.011764706, 0.011764706, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mk1ro"]
+resource_name = "fade_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.011764706, 0.011764706, 0.011764706, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w00xr"]
+_data = {
+&"RESET": SubResource("Animation_8bihv"),
+&"fade_in": SubResource("Animation_w00xr"),
+&"fade_out": SubResource("Animation_mk1ro")
+}
+
+[node name="SceneManager" type="CanvasLayer"]
+script = ExtResource("1_yueht")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.011764706, 0.011764706, 0.011764706, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_w00xr")
+}
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ebsso")
+volume_db = 3.188
+pitch_scale = 0.47

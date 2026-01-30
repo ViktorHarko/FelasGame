@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=3 uid="uid://dxv3pdd2s2k20"]
+
+[ext_resource type="Script" uid="uid://2fk5cffm2rwr" path="res://Levels/Room1/Room1.cs" id="1_f3n4x"]
+[ext_resource type="Texture2D" uid="uid://dghc2io0t02c5" path="res://test_assets/bg/Room2.jpg" id="2_o478n"]
+[ext_resource type="PackedScene" uid="uid://cflc5dt0v5qin" path="res://Entities/Player/Player.tscn" id="3_8rcgv"]
+[ext_resource type="PackedScene" uid="uid://c43hngt101ih6" path="res://Entities/Enemy1/Enemy1.tscn" id="4_wb3ot"]
+[ext_resource type="Texture2D" uid="uid://deffemo3v657c" path="res://test_assets/bg/Room2doors.png" id="5_2jogd"]
+[ext_resource type="PackedScene" uid="uid://dxme6si4gkjt7" path="res://Scenes/Objects/Portal.tscn" id="6_5okyb"]
+
+[node name="Room2" type="Node2D" node_paths=PackedStringArray("PlayerNode", "RoomSprite")]
+texture_filter = 1
+script = ExtResource("1_f3n4x")
+PlayerNode = NodePath("Player")
+RoomSprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.336, 0.343)
+texture = ExtResource("2_o478n")
+centered = false
+offset = Vector2(1, 1)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Player" parent="." instance=ExtResource("3_8rcgv")]
+position = Vector2(104, 332)
+
+[node name="Enemy" parent="." instance=ExtResource("4_wb3ot")]
+position = Vector2(690, 332)
+
+[node name="Enemy2" parent="." instance=ExtResource("4_wb3ot")]
+position = Vector2(363, 426)
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Platforms"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platforms/StaticBody2D"]
+position = Vector2(-14.000008, 255)
+scale = Vector2(0.6517058, 0.5006938)
+polygon = PackedVector2Array(24.550966, 229.6813, 380.5398, 227.68405, 383.60867, 329.5427, 385.1431, 433.3986, -24, 378, -19.94764, -411.4291, 296.1459, -439.39032, 293.07703, -109.847565, 22.83783, -115.293915)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Platforms/StaticBody2D"]
+position = Vector2(160.00002, 364)
+scale = Vector2(0.49658233, 0.36922863)
+polygon = PackedVector2Array(159.08737, 251.87646, 661, 370, 1572.7504, 371.04382, 1584.8329, -728.5459, 1226.3828, -880.2135, 1224.369, -398.12732, 1540.5302, -403.544, 1568.7228, -492.91956, 1566.709, -5.416687, 1441.8556, 5.416687, 1391.5115, 0, 1055.2128, 18.958435, 835.1314, 260.93976)
+
+[node name="Door" type="Sprite2D" parent="."]
+position = Vector2(1, 5)
+scale = Vector2(0.336, 0.336)
+texture = ExtResource("5_2jogd")
+centered = false
+
+[node name="Door_Level2" parent="." instance=ExtResource("6_5okyb")]
+position = Vector2(27.000004, 310)
+scale = Vector2(0.49658233, 0.36922863)
+NextScenePath = "uid://bnfxfkwph2554"
+PortalName = "Door_Level2"
+DestinationPortalName = "Door_Level1"
+
+[node name="Door_Level3" parent="." instance=ExtResource("6_5okyb")]
+position = Vector2(922, 313)
+scale = Vector2(0.49658233, 0.36922863)
+NextScenePath = "uid://b48foxsjmonwn"
+PortalName = "Door_Level2"
+DestinationPortalName = "Door_Level1"
+
+[node name="RainZone" type="CPUParticles2D" parent="."]
+position = Vector2(268, -1)
+amount = 10
+lifetime = 0.8
+preprocess = 2.0
+randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(34, 0)
+scale_amount_max = 2.0

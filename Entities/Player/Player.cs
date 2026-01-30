@@ -1,0 +1,204 @@
+using Godot;
+using System;
+
+public partial class Player : CharacterBody2D
+{
+	[ExportGroup("Components")]
+	[Export] public HealthComponent HealthComp; // Посилання на компонент здоров'я
+	
+	[ExportGroup("Stats")]
+	[Export] public float Speed = 250.0f;
+	[Export] public float JumpVelocity = -450.0f;
+	[Export] public float Acceleration = 1500.0f;
+	[Export] public float Friction = 1200.0f;
+	[Export] public int MaxJumps = 2;
+
+	[ExportGroup("Combat")]
+	[Export] public float KnockbackForce = 300.0f;
+	[Export] public float StunDuration = 0.3f;
+
+	public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+
+	// Стан
+	private bool _isAttacking = false;
+	private bool _isDead = false;
+	private bool _isInCutscene = false;
+	private bool _isStunned = false;
+	private int _jumpCount = 0;
+	private float _stunTimer = 0.0f;
+
+	// Вузли
+	private AnimatedSprite2D _animatedSprite;
+	private Area2D _swordHitbox; // Це тепер Hitbox (Area2D)
+
+	// Аудіо
+	private AudioStreamPlayer2D _audioWalk;
+	private AudioStreamPlayer2D _audioJump;
+	private AudioStreamPlayer2D _audioAttack;
+	private AudioStreamPlayer2D _audioHurt;
+
+	public override void _Ready()
+	{
+		_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_swordHitbox = GetNode<Area2D>("SwordArea"); // Переконайся, що на ньому висить скрипт Hitbox.cs
+		
+		// Аудіо
+		_audioWalk = GetNode<AudioStreamPlayer2D>("Audio_Walk");
+		_audioJump = GetNode<AudioStreamPlayer2D>("Audio_Jump");
+		_audioAttack = GetNode<AudioStreamPlayer2D>("Audio_Attack");
+		_audioHurt = GetNode<AudioStreamPlayer2D>("Audio_Hurt");
+
+		_animatedSprite.AnimationFinished += OnAnimationFinished;
+
+		// --- ПІДПИСКА НА СИГНАЛИ КОМПОНЕНТІВ ---
+		// Ми кажемо: "Коли HealthComponent кричить Died, запусти мій метод OnDeath"
+		HealthComp.Died += OnDeath;
+		// Можна також підписатися на зміну HP для UI
+		// HealthComp.HealthChanged += OnHealthChanged;
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_isDead) return;
+
+		Vector2 velocity = Velocity;
+		float fDelta = (float)delta;
+
+		// 1. Катсцена
+		if (_isInCutscene)
+		{
+			if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+			UpdateAnimation(velocity.X, velocity);
+			Velocity = velocity;
+			MoveAndSlide();
+			return;
+		}
+
+		// 2. Оглушення (Stun)
+		if (_stunTimer > 0)
+		{
+			_stunTimer -= fDelta;
+			velocity.Y += Gravity * fDelta;
+			velocity.X = Mathf.MoveToward(velocity.X, 0, Friction * fDelta);
+			Velocity = velocity;
+			MoveAndSlide();
+			return;
+		}
+
+		// 3. Атака
+		if (_isAttacking)
+		{
+			if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
+			Velocity = velocity;
+			MoveAndSlide();
+			return;
+		}
+
+		// 4. Рух
+		if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+		else _jumpCount = 0;
+
+		if (Input.IsActionJustPressed("ui_accept") && (IsOnFloor() || _jumpCount < MaxJumps))
+		{
+			velocity.Y = JumpVelocity;
+			_jumpCount++;
+			_audioJump.PitchScale = (float)GD.RandRange(0.9, 1.1);
+			_audioJump.Play();
+		}
+
+		float direction = Input.GetAxis("ui_left", "ui_right");
+		if (direction != 0)
+			 velocity.X = Mathf.MoveToward(Velocity.X, direction * Speed, Acceleration * fDelta);
+		else
+			 velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
+
+		if (Input.IsActionJustPressed("attack")) StartAttack();
+
+		// Аудіо ходьби
+		if (IsOnFloor() && Mathf.Abs(velocity.X) > 10)
+		{
+			if (!_audioWalk.Playing) _audioWalk.Play();
+		}
+		else _audioWalk.Stop();
+
+		UpdateAnimation(direction, velocity);
+		Velocity = velocity;
+		MoveAndSlide();
+	}
+
+	// Цей метод викликає Hurtbox, коли хтось нас вдарив
+	// Зверни увагу: нам більше не треба рахувати HP тут!
+	public void TakeHitLogic(int damage, Vector2 sourcePos)
+	{
+		if (_isDead) return;
+
+		// Звук і візуал
+		_audioHurt.Play();
+		_animatedSprite.Modulate = Colors.Red;
+		GetTree().CreateTimer(0.2f).Timeout += () => _animatedSprite.Modulate = Colors.White;
+
+		// Логіка відкидання
+		_stunTimer = StunDuration;
+		_isAttacking = false;
+		
+		Vector2 knockbackDir = (GlobalPosition - sourcePos).Normalized();
+		Velocity = new Vector2(knockbackDir.X * KnockbackForce, -200);
+	}
+
+	// Цей метод викликається автоматично через Сигнал від HealthComponent
+	private void OnDeath()
+	{
+		_isDead = true;
+		_animatedSprite.Play("death");
+		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+	}
+
+	private void StartAttack()
+	{
+		_isAttacking = true;
+		_animatedSprite.Play("attack");
+		_audioAttack.PitchScale = (float)GD.RandRange(0.9, 1.2);
+		_audioAttack.Play();
+		// Area2D (Hitbox) сам зробить свою справу, коли торкнеться ворога
+		_swordHitbox.Monitoring = true;
+	}
+
+	// --- Методи для катсцен ---
+	public void ToggleCutscene(bool active)
+	{
+		_isInCutscene = active;
+		if (active) { _isAttacking = false; Velocity = Vector2.Zero; _audioWalk.Stop(); }
+	}
+
+	public void ForceWalk(float directionSign)
+	{
+		Velocity = new Vector2(directionSign * Speed, Velocity.Y);
+		if (directionSign != 0) { _animatedSprite.FlipH = directionSign < 0; _animatedSprite.Play("run"); }
+	}
+
+	// Анімації та OnAnimationFinished залишаються такими ж...
+	private void OnAnimationFinished()
+	{
+		if (_animatedSprite.Animation == "attack") 
+	{ 
+		_isAttacking = false; 
+		_animatedSprite.Play("idle"); 
+		
+		// Вимикаємо зону ураження, щоб не бити, поки стоїмо
+		_swordHitbox.Monitoring = false;
+	}
+		if (_animatedSprite.Animation == "attack") { _isAttacking = false; _animatedSprite.Play("idle"); }
+		if (_animatedSprite.Animation == "death") GetTree().ReloadCurrentScene();
+	}
+
+	private void UpdateAnimation(float direction, Vector2 velocity)
+	{
+		if (_isAttacking || _isDead || _isStunned) return;
+		if (direction > 0) { _animatedSprite.FlipH = false; _swordHitbox.Scale = new Vector2(1, 1); }
+		else if (direction < 0) { _animatedSprite.FlipH = true; _swordHitbox.Scale = new Vector2(-1, 1); }
+
+		if (IsOnFloor()) { if (Mathf.IsZeroApprox(velocity.X)) _animatedSprite.Play("idle"); else _animatedSprite.Play("run"); }
+		else { if (velocity.Y < 0) _animatedSprite.Play("jump"); }
+	}
+}
