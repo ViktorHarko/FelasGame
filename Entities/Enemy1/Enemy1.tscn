@@ -236,7 +236,8 @@ size = Vector2(16.5, 15)
 size = Vector2(21, 25)
 
 [node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("HealthComp")]
-collision_layer = 2
+collision_layer = 4
+collision_mask = 1
 script = ExtResource("1_wovta")
 HealthComp = NodePath("HealthComponent")
 
@@ -257,12 +258,14 @@ target_position = Vector2(10, 30)
 collide_with_areas = true
 
 [node name="DetectionArea" type="Area2D" parent="."]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_rm7px")
 
 [node name="AttackArea" type="Area2D" parent="."]
 collision_layer = 0
+collision_mask = 2
 script = ExtResource("3_1exfc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
@@ -273,7 +276,7 @@ shape = SubResource("RectangleShape2D_5yix0")
 script = ExtResource("3_xeo28")
 
 [node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("HealthComponent")]
-collision_layer = 2
+collision_layer = 4
 collision_mask = 0
 script = ExtResource("4_kpr8r")
 HealthComponent = NodePath("../HealthComponent")

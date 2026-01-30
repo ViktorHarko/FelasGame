@@ -225,7 +225,7 @@ public partial class Enemy1 : CharacterBody2D
 			}
 			else if (_target.HasMethod("TakeDamage"))
 			{
-				 _target.Call("TakeDamage", Damage, GlobalPosition);
+				_target.Call("TakeDamage", Damage, GlobalPosition);
 			}
 		}
 	}

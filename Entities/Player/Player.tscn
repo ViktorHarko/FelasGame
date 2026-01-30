@@ -294,6 +294,7 @@ size = Vector2(49, 54)
 size = Vector2(40, 25)
 
 [node name="Player" type="CharacterBody2D" unique_id=1984405756 node_paths=PackedStringArray("HealthComp") groups=["Player"]]
+collision_layer = 2
 script = ExtResource("2_kyqiw")
 HealthComp = NodePath("HealthComponent")
 
@@ -309,6 +310,7 @@ position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_kyqiw")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=624283783]
+position = Vector2(1, 0)
 zoom = Vector2(2.5, 2.5)
 limit_left = 0
 limit_top = 0
@@ -319,7 +321,7 @@ position_smoothing_speed = 8.0
 
 [node name="SwordArea" type="Area2D" parent="." unique_id=2076491452]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 4
 monitoring = false
 script = ExtResource("4_yoq75")
 
@@ -358,7 +360,7 @@ debug_color = Color(0.34754047, 0.61271185, 0.28365457, 0.41960785)
 
 [node name="SwordAreaDown" type="Area2D" parent="." unique_id=1719525270]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 4
 monitoring = false
 script = ExtResource("4_yoq75")
 

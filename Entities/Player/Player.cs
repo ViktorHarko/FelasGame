@@ -71,6 +71,9 @@ public partial class Player : CharacterBody2D
 		Vector2 velocity = Velocity;
 		float fDelta = (float)delta;
 
+		if (_swordHitbox != null) _swordHitbox.Monitoring = _isAttacking;
+		if (_swordHitboxDown != null) _swordHitboxDown.Monitoring = _isDownAttacking;
+
 		// 1. Катсцена
 		if (_isInCutscene)
 		{
@@ -92,6 +95,13 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
+		if ((_isAttacking && _animatedSprite.Animation != "attack") ||
+			(_isDownAttacking && _animatedSprite.Animation != "down"))
+		{
+			ResetAttackState();
+		}
+
+
 		// 3. Атака
 		if (_isAttacking)
 		{
@@ -105,16 +115,16 @@ public partial class Player : CharacterBody2D
 		if (_isDownAttacking)
 		{
 			velocity.Y = DownAttackSpeed;
-			// Можна трохи контролювати рух по X
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * 0.5f * fDelta);
 
-			if (IsOnFloor())
+			Velocity = velocity;
+			MoveAndSlide();
+
+			if (IsOnFloor() || Velocity.Y < DownAttackSpeed * 0.5f)
 			{
 				EndDownAttack();
 			}
 
-			Velocity = velocity;
-			MoveAndSlide();
 			return;
 		}
 
@@ -174,8 +184,7 @@ public partial class Player : CharacterBody2D
 
 		// Логіка відкидання
 		_stunTimer = StunDuration;
-		_isAttacking = false;
-		_isDownAttacking = false;
+		ResetAttackState();
 		
 		Vector2 knockbackDir = (GlobalPosition - sourcePos).Normalized();
 		Velocity = new Vector2(knockbackDir.X * KnockbackForce, -200);
@@ -187,8 +196,7 @@ public partial class Player : CharacterBody2D
 		if (_isDead) return;
 
 		_isDead = true;
-		_isAttacking = false;
-		_isDownAttacking = false;
+		ResetAttackState();
 		_animatedSprite.Play("death");
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
 	}
@@ -220,8 +228,7 @@ public partial class Player : CharacterBody2D
 
 	private void EndDownAttack()
 	{
-		_isDownAttacking = false;
-		_swordHitboxDown.Monitoring = false;
+		ResetAttackState();
 		_animatedSprite.Play("idle");
 	}
 
@@ -246,8 +253,14 @@ public partial class Player : CharacterBody2D
 	// --- Методи для катсцен ---
 	public void ToggleCutscene(bool active)
 	{
+		ResetAttackState();
 		_isInCutscene = active;
-		if (active) { _isAttacking = false; Velocity = Vector2.Zero; _audioWalk.Stop(); }
+
+		if (active)
+		{ 
+			Velocity = Vector2.Zero; 
+			_audioWalk.Stop(); 
+		}
 	}
 
 	public void ForceWalk(float directionSign)
@@ -261,11 +274,8 @@ public partial class Player : CharacterBody2D
 	{
 		if (_animatedSprite.Animation == "attack")
 		{
-			_isAttacking = false;
+			ResetAttackState();
 			_animatedSprite.Play("idle");
-
-			// Вимикаємо зону ураження, щоб не бити, поки стоїмо
-			_swordHitbox.Monitoring = false;
 		}
 		if (_animatedSprite.Animation == "death") GetTree().ReloadCurrentScene();
 	}
@@ -290,5 +300,13 @@ public partial class Player : CharacterBody2D
 
 		if (IsOnFloor()) { if (Mathf.IsZeroApprox(velocity.X)) _animatedSprite.Play("idle"); else _animatedSprite.Play("run"); }
 		else { if (velocity.Y < 0) _animatedSprite.Play("jump"); }
+	}
+
+	private void ResetAttackState()
+	{
+		_isAttacking = false;
+		_isDownAttacking = false;
+		_swordHitbox.Monitoring = false;
+		_swordHitboxDown.Monitoring = false;
 	}
 }

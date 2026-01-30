@@ -6,6 +6,7 @@
 size = Vector2(42.5, 255.5)
 
 [node name="Portal" type="Area2D" groups=["Portals"]]
+collision_mask = 2
 script = ExtResource("1_4hdyq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Portals"]]
