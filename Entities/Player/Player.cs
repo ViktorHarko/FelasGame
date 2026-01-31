@@ -23,6 +23,11 @@ public partial class Player : CharacterBody2D
 	[ExportGroup("Invincibility Visual")]
 	[Export] public float BlinkInterval = 0.1f; // Швидкість блимання
 
+	[ExportGroup("Dash")]
+	[Export] public float DashSpeed = 650f;
+	[Export] public float DashDuration = 0.12f;
+	[Export] public float DashCooldown = 0.15f; 
+
 	public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	// Стан
@@ -31,8 +36,13 @@ public partial class Player : CharacterBody2D
 	private bool _isDead = false;
 	private bool _isInCutscene = false;
 	private bool _isStunned = false;
+	private bool _isDashing = false;
+	private bool _dashAvailableInAir = true;
 	private int _jumpCount = 0;
 	private float _stunTimer = 0.0f;
+
+	private float _dashTimer = 0f;
+	private float _dashCooldownTimer = 0f;
 
 	// Невразливість та мерехтіння
 	private bool _isBlinking = false;
@@ -83,6 +93,8 @@ public partial class Player : CharacterBody2D
 		Vector2 velocity = Velocity;
 		float fDelta = (float)delta;
 
+		_dashCooldownTimer -= fDelta;
+
 		if (_swordHitbox != null) _swordHitbox.Monitoring = _isAttacking;
 		if (_swordHitboxDown != null) _swordHitboxDown.Monitoring = _isDownAttacking;
 
@@ -113,6 +125,29 @@ public partial class Player : CharacterBody2D
 			ResetAttackState();
 		}
 
+		// --- DASH ---
+		if (_isDashing)
+		{
+			if (_animatedSprite.Animation != "dash")
+    		_animatedSprite.Play("dash");
+			_dashTimer -= fDelta;
+
+			velocity.Y = 0;
+
+			Velocity = velocity;
+			MoveAndSlide();
+
+			if (_dashTimer <= 0)
+			{
+				_isDashing = false;
+				_dashCooldownTimer = DashCooldown;
+
+				if (IsOnFloor())
+					_animatedSprite.Play(Mathf.Abs(Velocity.X) > 10 ? "run" : "idle");
+				else
+					_animatedSprite.Play("jump");
+			}
+		}
 
 		// 3. Атака
 		if (_isAttacking)
@@ -142,8 +177,15 @@ public partial class Player : CharacterBody2D
 
 
 		// 4. Рух
-		if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
-		else _jumpCount = 0;
+		if (!IsOnFloor())
+		{
+			velocity.Y += Gravity * fDelta;
+		}
+		else
+		{
+			_jumpCount = 0;
+			_dashAvailableInAir = true;
+		}
 
 		if (Input.IsActionJustPressed("ui_accept") && (IsOnFloor() || _jumpCount < MaxJumps))
 		{
@@ -169,6 +211,17 @@ public partial class Player : CharacterBody2D
 			{
 				StartAttack();
 			}
+		}
+
+		if (Input.IsActionJustPressed("dash"))
+		{
+			if (TryStartDash(direction, ref velocity))
+			{
+				_audioJump.Play();
+        		Velocity = velocity;
+        		MoveAndSlide();
+        		return;
+    		}
 		}
 
 		// Аудіо ходьби
@@ -295,6 +348,7 @@ public partial class Player : CharacterBody2D
 
 			// Скидаємо лічильник стрибків, щоб можна було стрибати знову
 			_jumpCount = 1;
+			_dashAvailableInAir = true;
 		}
 	}
 
@@ -331,7 +385,7 @@ public partial class Player : CharacterBody2D
 
 	private void UpdateAnimation(float direction, Vector2 velocity)
 	{
-		if (_isAttacking || _isDownAttacking || _isDead || _isStunned) return;
+		if (_isAttacking || _isDownAttacking || _isDashing || _isDead || _isStunned) return;
 		
 		if (direction > 0) 
 		{ 
@@ -357,5 +411,31 @@ public partial class Player : CharacterBody2D
 		_isDownAttacking = false;
 		_swordHitbox.Monitoring = false;
 		_swordHitboxDown.Monitoring = false;
+	}
+
+	private bool TryStartDash(float inputDir, ref Vector2 velocity)
+	{
+		if (_isDead) return false;
+		if (_dashCooldownTimer > 0f) return false;
+		if (_isAttacking || _isDownAttacking) return false;
+		if (_stunTimer > 0f) return false;
+
+		if (!IsOnFloor() && !_dashAvailableInAir) return false;
+
+		float dir;
+		if (!Mathf.IsZeroApprox(inputDir)) dir = Mathf.Sign(inputDir);
+		else dir = _animatedSprite.FlipH ? -1f : 1f;
+
+		_isDashing = true;
+		_dashTimer = DashDuration;
+
+		if (!IsOnFloor())
+			_dashAvailableInAir = false;
+
+		// ✅ ВАЖЛИВО: міняємо ЛОКАЛЬНИЙ velocity, а не Velocity
+		velocity.X = dir * DashSpeed;
+		velocity.Y = 0;
+
+		return true;
 	}
 }
