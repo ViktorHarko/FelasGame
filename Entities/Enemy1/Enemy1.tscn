@@ -236,7 +236,8 @@ size = Vector2(16.5, 15)
 size = Vector2(21, 25)
 
 [node name="Enemy" type="CharacterBody2D" unique_id=1168384077 node_paths=PackedStringArray("HealthComp")]
-collision_layer = 4
+collision_layer = 8
+collision_mask = 9
 script = ExtResource("1_wovta")
 HealthComp = NodePath("HealthComponent")
 
@@ -279,6 +280,7 @@ collision_layer = 4
 collision_mask = 0
 script = ExtResource("4_kpr8r")
 HealthComponent = NodePath("../HealthComponent")
+InvincibilityDuration = 0.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1840751414]
 position = Vector2(-1.5, -0.5)

@@ -206,9 +206,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_uw7o4")
 }],
-"loop": true,
+"loop": false,
 "name": &"down",
-"speed": 10.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -350,6 +350,7 @@ stream = ExtResource("4_dewec")
 script = ExtResource("8_bhhdu")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1010765740 node_paths=PackedStringArray("HealthComponent")]
+collision_layer = 2
 collision_mask = 0
 script = ExtResource("9_megsn")
 HealthComponent = NodePath("../HealthComponent")
