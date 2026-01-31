@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://bjdv03gb10fd3"]
+
+[ext_resource type="Texture2D" uid="uid://014ibnfy3w2h" path="res://test_assets/bg/MainMenu.png" id="1_e1xpn"]
+[ext_resource type="Script" uid="uid://sqo5lc5d4rx8" path="res://Menu/MainMenu.cs" id="1_swd6r"]
+[ext_resource type="AudioStream" uid="uid://d23yd6i4110fn" path="res://Audio/MainMenu/Lukrembo - Dream With Tea (freetouse.com) (1).mp3" id="2_swd6r"]
+[ext_resource type="Script" uid="uid://o3vsd8lfwjke" path="res://Menu/ControlMenu.cs" id="3_tpenk"]
+
+[node name="MainMenu" type="Node2D" unique_id=724436942]
+script = ExtResource("1_swd6r")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=200875699]
+position = Vector2(1127, 600)
+stream = ExtResource("2_swd6r")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1156401872]
+follow_viewport_enabled = true
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=718011044]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("3_tpenk")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control" unique_id=337536672]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_e1xpn")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control" unique_id=296685222]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -33.0
+offset_right = 46.5
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+
+[node name="newGameButton" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=897224921]
+layout_mode = 2
+focus_neighbor_left = NodePath("../exitButton")
+focus_neighbor_top = NodePath("../exitButton")
+focus_neighbor_right = NodePath("../exitButton")
+focus_neighbor_bottom = NodePath("../exitButton")
+focus_next = NodePath("../exitButton")
+focus_previous = NodePath("../exitButton")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 32
+text = "New Game"
+
+[node name="exitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=152615792]
+layout_mode = 2
+focus_neighbor_left = NodePath("../newGameButton")
+focus_neighbor_top = NodePath("../newGameButton")
+focus_neighbor_right = NodePath("../newGameButton")
+focus_neighbor_bottom = NodePath("../newGameButton")
+focus_next = NodePath("../newGameButton")
+focus_previous = NodePath("../newGameButton")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 32
+text = "Quit"
