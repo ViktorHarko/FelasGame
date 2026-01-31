@@ -64,8 +64,9 @@ DestinationPortalName = "Door_Level1"
 position = Vector2(922, 313)
 scale = Vector2(0.49658233, 0.36922863)
 NextScenePath = "uid://b48foxsjmonwn"
-PortalName = "Door_Level2"
-DestinationPortalName = "Door_Level1"
+PortalName = "Door_Level_Room2_Out"
+DestinationPortalName = "Door_Level_Boos_In"
+SpawnOnLeft = true
 
 [node name="RainZone" type="CPUParticles2D" parent="."]
 position = Vector2(268, -1)

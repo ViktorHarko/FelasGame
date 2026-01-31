@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b48foxsjmonwn"]
+[gd_scene load_steps=8 format=3 uid="uid://b48foxsjmonwn"]
 
 [ext_resource type="Texture2D" uid="uid://nniamuf2sje7" path="res://test_assets/bg/BossArena.png" id="1_63hd8"]
 [ext_resource type="PackedScene" uid="uid://cflc5dt0v5qin" path="res://Entities/Player/Player.tscn" id="2_hkq8d"]
@@ -8,46 +8,46 @@
 [ext_resource type="Script" uid="uid://dxworlju84pyx" path="res://Scripts/Objects/RandomLoopSound.cs" id="6_dyu5q"]
 [ext_resource type="PackedScene" uid="uid://dlpvtdqgujs7a" path="res://Entities/Frog/Frog.tscn" id="7_kfym4"]
 
-[node name="BossLocation" type="Node2D" unique_id=544946483]
+[node name="BossLocation" type="Node2D"]
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=629787063]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(0.336, 0.343)
 texture = ExtResource("1_63hd8")
 centered = false
 offset = Vector2(1, 1)
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1385955207]
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=731688376]
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 
-[node name="Player" parent="." unique_id=865918901 instance=ExtResource("2_hkq8d")]
+[node name="Player" parent="." instance=ExtResource("2_hkq8d")]
 position = Vector2(188, 340)
 
-[node name="Platforms" type="Node2D" parent="." unique_id=590253435]
+[node name="Platforms" type="Node2D" parent="."]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Platforms" unique_id=156409850]
+[node name="StaticBody2D" type="StaticBody2D" parent="Platforms"]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platforms/StaticBody2D" unique_id=1768374151]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platforms/StaticBody2D"]
 position = Vector2(-14.000008, 240)
 scale = Vector2(0.6517058, 0.5006938)
 polygon = PackedVector2Array(21.482101, 267.6287, 213.74475, 262.99707, 1384.4412, 269.15942, 1473.0573, 269.6259, 1473.0573, -145.7977, 1274.3076, -126.0069, 1272.0463, -39.94458, 1230.6166, -39.94458, 1229.0822, -119.83371, 1221.4099, -181.7478, 1190.7213, -481.3321, 1598.8809, -471.34595, 1609.622, 379.47342, -24, 378, -24.550941, -481.3321, 294.61145, -481.3321, 276.19824, -163.77274, 254.71617, -57.919617, 205.61426, -61.914093, 203.3012, -149.80933, 23.016533, -153.78659)
 
-[node name="Door" type="Sprite2D" parent="." unique_id=1794000791]
+[node name="Door" type="Sprite2D" parent="."]
 position = Vector2(0, 6)
 scale = Vector2(0.336, 0.336)
 texture = ExtResource("3_ujx7t")
 centered = false
 
-[node name="Door_Level1" parent="." unique_id=1892783481 instance=ExtResource("4_d1c5a")]
+[node name="Door_Level1" parent="." instance=ExtResource("4_d1c5a")]
 position = Vector2(17.000061, 313)
 scale = Vector2(0.49658233, 0.36922863)
 NextScenePath = "uid://dxv3pdd2s2k20"
-PortalName = "Door_Level1"
-DestinationPortalName = "Door_Level2"
+PortalName = "Door_Level_Boos_In"
+DestinationPortalName = "Door_Level_Room2_Out"
 SpawnOnLeft = true
 
-[node name="RainZone" type="CPUParticles2D" parent="." unique_id=831548186]
+[node name="RainZone" type="CPUParticles2D" parent="."]
 position = Vector2(265, 2)
 amount = 50
 lifetime = 0.76
@@ -57,19 +57,19 @@ emission_shape = 3
 emission_rect_extents = Vector2(40, 0)
 scale_amount_max = 2.0
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1263648413]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_cpjkm")
 volume_db = -17.324
 script = ExtResource("6_dyu5q")
 
-[node name="Frog" parent="." unique_id=895486025 instance=ExtResource("7_kfym4")]
+[node name="Frog" parent="." instance=ExtResource("7_kfym4")]
 position = Vector2(466, 354)
 
-[node name="Frog2" parent="." unique_id=686247064 instance=ExtResource("7_kfym4")]
+[node name="Frog2" parent="." instance=ExtResource("7_kfym4")]
 position = Vector2(358, 359)
 
-[node name="Frog3" parent="." unique_id=1138498212 instance=ExtResource("7_kfym4")]
+[node name="Frog3" parent="." instance=ExtResource("7_kfym4")]
 position = Vector2(629, 362)
 
-[node name="Frog4" parent="." unique_id=858232955 instance=ExtResource("7_kfym4")]
+[node name="Frog4" parent="." instance=ExtResource("7_kfym4")]
 position = Vector2(728, 361)
