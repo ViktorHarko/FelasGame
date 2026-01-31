@@ -52,6 +52,7 @@ grow_vertical = 2
 focus_mode = 2
 
 [node name="newGameButton" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=897224921]
+process_mode = 3
 layout_mode = 2
 focus_neighbor_left = NodePath("../exitButton")
 focus_neighbor_top = NodePath("../exitButton")
@@ -64,6 +65,7 @@ theme_override_font_sizes/font_size = 32
 text = "New Game"
 
 [node name="exitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=152615792]
+process_mode = 3
 layout_mode = 2
 focus_neighbor_left = NodePath("../newGameButton")
 focus_neighbor_top = NodePath("../newGameButton")
