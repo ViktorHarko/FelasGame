@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://c43hngt101ih6"]
+[gd_scene format=3 uid="uid://c43hngt101ih6"]
 
 [ext_resource type="Script" uid="uid://c6sjrdmekx51y" path="res://Entities/Enemy1/Enemy1.cs" id="1_wovta"]
 [ext_resource type="Texture2D" uid="uid://b2ewre3isxe5i" path="res://test_assets/Knight_A.png" id="2_xeo28"]
@@ -235,55 +235,54 @@ size = Vector2(16.5, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1exfc"]
 size = Vector2(21, 25)
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("HealthComp")]
+[node name="Enemy" type="CharacterBody2D" unique_id=1168384077 node_paths=PackedStringArray("HealthComp")]
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1_wovta")
 HealthComp = NodePath("HealthComponent")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=104550292]
 position = Vector2(1.0000019, 1.9073486e-06)
 scale = Vector2(1.3958334, 1.3958334)
 sprite_frames = SubResource("SpriteFrames_7fd37")
 animation = &"hurt"
 frame_progress = 0.5111491
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=853718305]
 position = Vector2(-1.5, -5.5)
 shape = SubResource("RectangleShape2D_0o0ue")
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=1879503052]
 position = Vector2(10, 0)
 target_position = Vector2(10, 30)
 collide_with_areas = true
 
-[node name="DetectionArea" type="Area2D" parent="."]
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1497354851]
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1122625659]
 shape = SubResource("CircleShape2D_rm7px")
 
-[node name="AttackArea" type="Area2D" parent="."]
+[node name="AttackArea" type="Area2D" parent="." unique_id=686427225]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("3_1exfc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1713814569]
 position = Vector2(18.75, 0)
 shape = SubResource("RectangleShape2D_5yix0")
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=353388222]
 script = ExtResource("3_xeo28")
 
-[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("HealthComponent")]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1546967226 node_paths=PackedStringArray("HealthComponent")]
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("4_kpr8r")
 HealthComponent = NodePath("../HealthComponent")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1840751414]
 position = Vector2(-1.5, -0.5)
 shape = SubResource("RectangleShape2D_1exfc")
 debug_color = Color(0.9274651, 0.08186654, 0.63131845, 0.41960785)
 
-[node name="Node" type="Node" parent="."]
+[node name="Node" type="Node" parent="." unique_id=708923860]

@@ -20,6 +20,9 @@ public partial class Player : CharacterBody2D
 	[Export] public float DownAttackSpeed = 600.0f;
 	[Export] public float DownAttackBounce = -350.0f;
 
+	[ExportGroup("Invincibility Visual")]
+	[Export] public float BlinkInterval = 0.1f; // Швидкість блимання
+
 	public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	// Стан
@@ -31,10 +34,15 @@ public partial class Player : CharacterBody2D
 	private int _jumpCount = 0;
 	private float _stunTimer = 0.0f;
 
+	// Невразливість та мерехтіння
+	private bool _isBlinking = false;
+	private float _blinkTimer = 0.0f;
+
 	// Вузли
 	private AnimatedSprite2D _animatedSprite;
 	private Area2D _swordHitbox; // Це тепер Hitbox (Area2D)
 	private Area2D _swordHitboxDown;
+	private Hurtbox _hurtbox;
 
 	// Аудіо
 	private AudioStreamPlayer2D _audioWalk;
@@ -60,8 +68,12 @@ public partial class Player : CharacterBody2D
 		// --- ПІДПИСКА НА СИГНАЛИ КОМПОНЕНТІВ ---
 		// Ми кажемо: "Коли HealthComponent кричить Died, запусти мій метод OnDeath"
 		HealthComp.Died += OnDeath;
-		// Можна також підписатися на зміну HP для UI
-		// HealthComp.HealthChanged += OnHealthChanged;
+
+		// Отримуємо Hurtbox і підписуємось на сигнали невразливості
+		_hurtbox = GetNode<Hurtbox>("Hurtbox");
+		_hurtbox.HitReceived += TakeHitLogic;
+		_hurtbox.InvincibilityStarted += OnInvincibilityStarted;
+		_hurtbox.InvincibilityEnded += OnInvincibilityEnded;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -171,23 +183,55 @@ public partial class Player : CharacterBody2D
 		MoveAndSlide();
 	}
 
+	public override void _Process(double delta)
+	{
+		if (_isBlinking)
+		{
+			_blinkTimer -= (float)delta;
+			if (_blinkTimer <= 0)
+			{
+				// Перемикаємо між червоним напівпрозорим і нормальним
+				if (_animatedSprite.Modulate.A < 1.0f)
+				{
+					_animatedSprite.Modulate = Colors.White; // Повністю видимий
+				}
+				else
+				{
+					_animatedSprite.Modulate = new Color(1, 0, 0, 0.5f); // Червоний напівпрозорий
+				}
+				_blinkTimer = BlinkInterval;
+			}
+		}
+	}
+
 	// Цей метод викликає Hurtbox, коли хтось нас вдарив
 	// Зверни увагу: нам більше не треба рахувати HP тут!
 	public void TakeHitLogic(int damage, Vector2 sourcePos)
 	{
 		if (_isDead) return;
 
-		// Звук і візуал
+		// Звук (тільки якщо урон реально пройшов)
 		_audioHurt.Play();
-		_animatedSprite.Modulate = Colors.Red;
-		GetTree().CreateTimer(0.2f).Timeout += () => _animatedSprite.Modulate = Colors.White;
 
 		// Логіка відкидання
 		_stunTimer = StunDuration;
 		ResetAttackState();
-		
+
 		Vector2 knockbackDir = (GlobalPosition - sourcePos).Normalized();
 		Velocity = new Vector2(knockbackDir.X * KnockbackForce, -200);
+	}
+
+	// Методи для обробки невразливості
+	private void OnInvincibilityStarted()
+	{
+		_isBlinking = true;
+		_blinkTimer = BlinkInterval;
+	}
+
+	private void OnInvincibilityEnded()
+	{
+		_isBlinking = false;
+		_animatedSprite.Modulate = Colors.White; // Відновлюємо нормальний колір
 	}
 
 	// Цей метод викликається автоматично через Сигнал від HealthComponent
@@ -196,6 +240,11 @@ public partial class Player : CharacterBody2D
 		if (_isDead) return;
 
 		_isDead = true;
+
+		// Зупиняємо блимання і відновлюємо нормальний колір
+		_isBlinking = false;
+		_animatedSprite.Modulate = Colors.White;
+
 		ResetAttackState();
 		_animatedSprite.Play("death");
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);

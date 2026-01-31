@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://dxf454s303u5r" path="res://Audio/Minecraft Damage (Oof) - QuickSounds.com.mp3" id="5_bhhdu"]
 [ext_resource type="Script" uid="uid://cwvf276dmm55a" path="res://Scripts/Components/HealthComponent.cs" id="8_bhhdu"]
 [ext_resource type="Script" uid="uid://m8sy74p7444o" path="res://Scripts/Components/Hurtbox.cs" id="9_megsn"]
+[ext_resource type="Script" uid="uid://cf11ensymbuke" path="res://Scripts/UI/HealthUI.cs" id="12_lmeus"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kyqiw"]
 atlas = ExtResource("2_gntrk")
@@ -367,3 +368,29 @@ script = ExtResource("4_yoq75")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SwordAreaDown" unique_id=971620813]
 position = Vector2(0, 30)
 shape = SubResource("RectangleShape2D_hacra")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1695644109]
+
+[node name="HealthUI" type="Control" parent="CanvasLayer" unique_id=1854954156 node_paths=PackedStringArray("HealthComponent")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 50.0
+script = ExtResource("12_lmeus")
+HealthComponent = NodePath("../../HealthComponent")
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HealthUI" unique_id=1884387294]
+layout_mode = 0
+offset_left = -17.0
+offset_top = 11.0
+offset_right = 183.0
+offset_bottom = 41.0
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/HealthUI" unique_id=960850364]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 45.0
+offset_right = 50.0
+offset_bottom = 68.0
