@@ -3,6 +3,7 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
+	[Export] public PauseMenu PauseMenu;
 	[ExportGroup("Components")]
 	[Export] public HealthComponent HealthComp; // Посилання на компонент здоров'я
 	
@@ -74,7 +75,10 @@ public partial class Player : CharacterBody2D
 		_hurtbox.HitReceived += TakeHitLogic;
 		_hurtbox.InvincibilityStarted += OnInvincibilityStarted;
 		_hurtbox.InvincibilityEnded += OnInvincibilityEnded;
+		
+		
 	}
+
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -357,5 +361,34 @@ public partial class Player : CharacterBody2D
 		_isDownAttacking = false;
 		_swordHitbox.Monitoring = false;
 		_swordHitboxDown.Monitoring = false;
+	}
+	
+	
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey keyEvent && keyEvent.IsPressed() && !keyEvent.IsEcho())
+		{
+			if (keyEvent.Keycode == Key.Escape && PauseMenu != null)
+			{
+				PauseMenu.TogglePause(!PauseMenu.Visible);
+
+				// Зупиняємо звук ходьби під час паузи
+				if (PauseMenu.Visible)
+					_audioWalk.Stop();
+			}
+		}
+	}
+	private void TogglePauseMenu()
+	{
+		if (PauseMenu == null) return;
+
+		PauseMenu.Visible = !PauseMenu.Visible;
+		GetTree().Paused = PauseMenu.Visible;
+
+		// При паузі зупиняємо аудіо ходьби
+		if (PauseMenu.Visible)
+		{
+			_audioWalk.Stop();
+		}
 	}
 }
