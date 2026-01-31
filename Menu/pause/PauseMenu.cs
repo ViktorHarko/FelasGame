@@ -4,20 +4,33 @@ using System;
 public partial class PauseMenu : Control
 {
 	[Export] private string menuPath = "res://Menu/MainMenu.tscn";
-	
+	[Export] private Button resumeButton;
+	[Export] private Button restartButton;
+	[Export] private Button quitButton;
 	public override void _Ready()
 	{
 		Visible = false; // приховуємо меню за замовчуванням
 
 		// Підключаємо кнопки
-		var resumeButton = GetNode<Button>("PanelContainer/VBoxContainer/Button");
+		resumeButton = GetNode<Button>("PanelContainer/VBoxContainer/Button");
 		resumeButton.Pressed += OnResumePressed;
 
-		var restartButton = GetNode<Button>("PanelContainer/VBoxContainer/Button2");
+		restartButton = GetNode<Button>("PanelContainer/VBoxContainer/Button2");
 		restartButton.Pressed += OnRestartPressed;
 
-		var quitButton = GetNode<Button>("PanelContainer/VBoxContainer/Button3");
+		quitButton = GetNode<Button>("PanelContainer/VBoxContainer/Button3");
 		quitButton.Pressed += OnQuitPressed;
+		
+		resumeButton.GrabFocus();
+	}
+	
+	public override void _Process(double delta)
+	{
+		// Якщо зараз жодна кнопка не у фокусі, ставимо на першу
+		if (!resumeButton.HasFocus() && !restartButton.HasFocus() && !quitButton.HasFocus())
+		{
+			resumeButton.GrabFocus();
+		}
 	}
 
 	private void OnResumePressed()
