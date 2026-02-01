@@ -151,6 +151,10 @@ region = Rect2(192, 96, 48, 48)
 atlas = ExtResource("2_gntrk")
 region = Rect2(240, 96, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_samso"]
+atlas = ExtResource("3_gntrk")
+region = Rect2(300, 200, 25, 25)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_5v66d"]
 animations = [{
 "frames": [{
@@ -294,6 +298,14 @@ animations = [{
 "loop": true,
 "name": &"run",
 "speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_samso")
+}],
+"loop": true,
+"name": &"wall_slide",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kyqiw"]
@@ -308,17 +320,16 @@ size = Vector2(49, 54)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hacra"]
 size = Vector2(40, 25)
 
-[node name="Player" type="CharacterBody2D" unique_id=2035818075 node_paths=PackedStringArray("PauseMenu", "HealthComp") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" unique_id=2035818075 node_paths=PackedStringArray("HealthComp") groups=["Player"]]
 collision_layer = 2
 script = ExtResource("2_kyqiw")
-PauseMenu = NodePath("CanvasLayer2/PauseMenu")
 HealthComp = NodePath("HealthComponent")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1059858693]
 position = Vector2(-1.9073486e-06, -1.6987324e-06)
 scale = Vector2(2.667, 2.667)
 sprite_frames = SubResource("SpriteFrames_5v66d")
-animation = &"dash"
+animation = &"wall_slide"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1197392106]
 position = Vector2(0, -4)
@@ -333,6 +344,14 @@ limit_right = 946
 limit_bottom = 515
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
+
+[node name="WallRayLeft" type="RayCast2D" parent="." unique_id=870212293]
+scale = Vector2(2.56, 1)
+target_position = Vector2(-10, 0)
+
+[node name="WallRayRight" type="RayCast2D" parent="." unique_id=1608579965]
+scale = Vector2(2.639998, 1)
+target_position = Vector2(10, 0)
 
 [node name="SwordArea" type="Area2D" parent="." unique_id=385964336]
 collision_layer = 0
