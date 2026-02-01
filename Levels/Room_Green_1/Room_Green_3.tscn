@@ -1,0 +1,1077 @@
+[gd_scene format=3 uid="uid://6u3l3qn0g6nd"]
+
+[ext_resource type="Script" uid="uid://2fk5cffm2rwr" path="res://Levels/Room1/Room1.cs" id="1_ddcbx"]
+[ext_resource type="Texture2D" uid="uid://bij5t7ps8tdf1" path="res://test_assets/Paper-Pixels-8x8/Tiles.png" id="3_uojkq"]
+[ext_resource type="Texture2D" uid="uid://ctvfbpgtc58xg" path="res://test_assets/Paper-Pixels-8x8/UI.png" id="4_ddcbx"]
+[ext_resource type="PackedScene" uid="uid://cflc5dt0v5qin" path="res://Entities/Player/Player.tscn" id="4_uojkq"]
+[ext_resource type="Texture2D" uid="uid://byn5xewad3qog" path="res://test_assets/hollow/moss__0000_bmoss.png" id="5_ig60m"]
+[ext_resource type="Texture2D" uid="uid://bupxk0nbyp1n4" path="res://test_assets/hollow/Moss_clump_depress_010002.png" id="6_yw2qb"]
+[ext_resource type="Texture2D" uid="uid://dqn4q8uumxqsa" path="res://test_assets/hollow/moss__0015_weaver_plaque_side.png" id="7_kra8n"]
+[ext_resource type="Shader" uid="uid://cknypb5jq054h" path="res://Levels/Room_Green_1/Room_Green_33.gdshader" id="8_yw2qb"]
+[ext_resource type="Texture2D" uid="uid://bo7kefod4wgmx" path="res://test_assets/hollow/Moss_clump_depress_curvy0000.png" id="9_67bvf"]
+[ext_resource type="Texture2D" uid="uid://brifoshx8uvxk" path="res://test_assets/White_background.png" id="9_kra8n"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wptqt"]
+texture = ExtResource("3_uojkq")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+6:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+5:10/0 = 0
+6:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+6:11/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+6:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+4:13/0 = 0
+5:13/0 = 0
+6:13/0 = 0
+7:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+5:14/0 = 0
+6:14/0 = 0
+7:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+0:16/0 = 0
+1:16/0 = 0
+2:16/0 = 0
+0:17/0 = 0
+1:17/0 = 0
+2:17/0 = 0
+3:17/0 = 0
+7:17/0 = 0
+8:17/0 = 0
+0:18/0 = 0
+1:18/0 = 0
+2:18/0 = 0
+3:18/0 = 0
+4:18/0 = 0
+5:18/0 = 0
+6:18/0 = 0
+7:18/0 = 0
+8:18/0 = 0
+0:19/0 = 0
+1:19/0 = 0
+2:19/0 = 0
+3:19/0 = 0
+4:19/0 = 0
+5:19/0 = 0
+6:19/0 = 0
+7:19/0 = 0
+8:19/0 = 0
+0:20/0 = 0
+1:20/0 = 0
+2:20/0 = 0
+3:20/0 = 0
+4:20/0 = 0
+5:20/0 = 0
+6:20/0 = 0
+0:21/0 = 0
+1:21/0 = 0
+2:21/0 = 0
+3:21/0 = 0
+4:21/0 = 0
+5:21/0 = 0
+6:21/0 = 0
+7:21/0 = 0
+8:21/0 = 0
+9:21/0 = 0
+10:21/0 = 0
+11:21/0 = 0
+0:22/0 = 0
+1:22/0 = 0
+2:22/0 = 0
+3:22/0 = 0
+6:22/0 = 0
+7:22/0 = 0
+11:22/0 = 0
+0:23/0 = 0
+1:23/0 = 0
+2:23/0 = 0
+3:23/0 = 0
+0:24/0 = 0
+1:24/0 = 0
+2:24/0 = 0
+3:24/0 = 0
+4:24/0 = 0
+5:24/0 = 0
+6:24/0 = 0
+7:24/0 = 0
+8:24/0 = 0
+9:24/0 = 0
+10:24/0 = 0
+11:24/0 = 0
+12:24/0 = 0
+13:24/0 = 0
+14:24/0 = 0
+15:24/0 = 0
+16:24/0 = 0
+17:24/0 = 0
+18:24/0 = 0
+19:24/0 = 0
+0:25/0 = 0
+1:25/0 = 0
+2:25/0 = 0
+3:25/0 = 0
+4:25/0 = 0
+5:25/0 = 0
+6:25/0 = 0
+7:25/0 = 0
+8:25/0 = 0
+9:25/0 = 0
+10:25/0 = 0
+11:25/0 = 0
+12:25/0 = 0
+13:25/0 = 0
+14:25/0 = 0
+15:25/0 = 0
+16:25/0 = 0
+17:25/0 = 0
+18:25/0 = 0
+19:25/0 = 0
+0:26/0 = 0
+1:26/0 = 0
+2:26/0 = 0
+3:26/0 = 0
+16:26/0 = 0
+17:26/0 = 0
+18:26/0 = 0
+19:26/0 = 0
+0:27/0 = 0
+1:27/0 = 0
+2:27/0 = 0
+0:28/0 = 0
+1:28/0 = 0
+0:29/0 = 0
+1:29/0 = 0
+0:30/0 = 0
+1:30/0 = 0
+2:30/0 = 0
+3:30/0 = 0
+4:30/0 = 0
+5:30/0 = 0
+6:30/0 = 0
+7:30/0 = 0
+0:31/0 = 0
+1:31/0 = 0
+2:31/0 = 0
+3:31/0 = 0
+4:31/0 = 0
+5:31/0 = 0
+6:31/0 = 0
+7:31/0 = 0
+0:32/0 = 0
+1:32/0 = 0
+2:32/0 = 0
+3:32/0 = 0
+0:33/0 = 0
+1:33/0 = 0
+2:33/0 = 0
+3:33/0 = 0
+0:34/0 = 0
+1:34/0 = 0
+0:35/0 = 0
+1:35/0 = 0
+2:35/0 = 0
+3:35/0 = 0
+4:35/0 = 0
+5:35/0 = 0
+6:35/0 = 0
+0:36/0 = 0
+2:36/0 = 0
+3:36/0 = 0
+6:36/0 = 0
+0:37/0 = 0
+1:37/0 = 0
+2:37/0 = 0
+3:37/0 = 0
+0:38/0 = 0
+1:38/0 = 0
+2:38/0 = 0
+3:38/0 = 0
+4:38/0 = 0
+5:38/0 = 0
+6:38/0 = 0
+7:38/0 = 0
+0:39/0 = 0
+1:39/0 = 0
+2:39/0 = 0
+3:39/0 = 0
+4:39/0 = 0
+5:39/0 = 0
+6:39/0 = 0
+7:39/0 = 0
+0:40/0 = 0
+1:40/0 = 0
+2:40/0 = 0
+3:40/0 = 0
+4:40/0 = 0
+5:40/0 = 0
+6:40/0 = 0
+7:40/0 = 0
+0:41/0 = 0
+1:41/0 = 0
+2:41/0 = 0
+0:42/0 = 0
+1:42/0 = 0
+12:42/0 = 0
+13:42/0 = 0
+0:43/0 = 0
+1:43/0 = 0
+2:43/0 = 0
+3:43/0 = 0
+4:43/0 = 0
+5:43/0 = 0
+6:43/0 = 0
+7:43/0 = 0
+8:43/0 = 0
+9:43/0 = 0
+10:43/0 = 0
+11:43/0 = 0
+12:43/0 = 0
+13:43/0 = 0
+0:44/0 = 0
+1:44/0 = 0
+2:44/0 = 0
+3:44/0 = 0
+4:44/0 = 0
+5:44/0 = 0
+6:44/0 = 0
+7:44/0 = 0
+8:44/0 = 0
+9:44/0 = 0
+10:44/0 = 0
+11:44/0 = 0
+12:44/0 = 0
+13:44/0 = 0
+0:45/0 = 0
+2:45/0 = 0
+3:45/0 = 0
+5:45/0 = 0
+6:45/0 = 0
+0:46/0 = 0
+1:46/0 = 0
+2:46/0 = 0
+3:46/0 = 0
+4:46/0 = 0
+5:46/0 = 0
+6:46/0 = 0
+7:46/0 = 0
+8:46/0 = 0
+0:47/0 = 0
+1:47/0 = 0
+2:47/0 = 0
+3:47/0 = 0
+4:47/0 = 0
+5:47/0 = 0
+6:47/0 = 0
+7:47/0 = 0
+8:47/0 = 0
+0:48/0 = 0
+1:48/0 = 0
+2:48/0 = 0
+3:48/0 = 0
+5:48/0 = 0
+6:48/0 = 0
+0:49/0 = 0
+0:50/0 = 0
+1:50/0 = 0
+2:50/0 = 0
+3:50/0 = 0
+4:50/0 = 0
+5:50/0 = 0
+6:50/0 = 0
+7:50/0 = 0
+8:50/0 = 0
+9:50/0 = 0
+10:50/0 = 0
+11:50/0 = 0
+0:51/0 = 0
+1:51/0 = 0
+2:51/0 = 0
+3:51/0 = 0
+4:51/0 = 0
+0:52/0 = 0
+1:52/0 = 0
+2:52/0 = 0
+3:52/0 = 0
+4:52/0 = 0
+0:53/0 = 0
+1:53/0 = 0
+2:53/0 = 0
+3:53/0 = 0
+8:53/0 = 0
+0:54/0 = 0
+1:54/0 = 0
+2:54/0 = 0
+3:54/0 = 0
+4:54/0 = 0
+5:54/0 = 0
+6:54/0 = 0
+7:54/0 = 0
+8:54/0 = 0
+9:54/0 = 0
+0:55/0 = 0
+1:55/0 = 0
+2:55/0 = 0
+3:55/0 = 0
+4:55/0 = 0
+5:55/0 = 0
+6:55/0 = 0
+7:55/0 = 0
+8:55/0 = 0
+9:55/0 = 0
+0:56/0 = 0
+1:56/0 = 0
+2:56/0 = 0
+3:56/0 = 0
+4:56/0 = 0
+5:56/0 = 0
+6:56/0 = 0
+7:56/0 = 0
+8:56/0 = 0
+9:56/0 = 0
+10:56/0 = 0
+0:57/0 = 0
+1:57/0 = 0
+2:57/0 = 0
+3:57/0 = 0
+4:57/0 = 0
+5:57/0 = 0
+6:57/0 = 0
+7:57/0 = 0
+8:57/0 = 0
+9:57/0 = 0
+10:57/0 = 0
+0:58/0 = 0
+1:58/0 = 0
+2:58/0 = 0
+3:58/0 = 0
+4:58/0 = 0
+5:58/0 = 0
+6:58/0 = 0
+7:58/0 = 0
+8:58/0 = 0
+9:58/0 = 0
+0:59/0 = 0
+1:59/0 = 0
+2:59/0 = 0
+3:59/0 = 0
+4:59/0 = 0
+5:59/0 = 0
+6:59/0 = 0
+7:59/0 = 0
+8:59/0 = 0
+9:59/0 = 0
+10:59/0 = 0
+11:59/0 = 0
+12:59/0 = 0
+13:59/0 = 0
+14:59/0 = 0
+15:59/0 = 0
+0:60/0 = 0
+1:60/0 = 0
+2:60/0 = 0
+3:60/0 = 0
+4:60/0 = 0
+5:60/0 = 0
+6:60/0 = 0
+7:60/0 = 0
+8:60/0 = 0
+9:60/0 = 0
+10:60/0 = 0
+11:60/0 = 0
+12:60/0 = 0
+13:60/0 = 0
+14:60/0 = 0
+15:60/0 = 0
+0:61/0 = 0
+1:61/0 = 0
+2:61/0 = 0
+3:61/0 = 0
+4:61/0 = 0
+5:61/0 = 0
+6:61/0 = 0
+7:61/0 = 0
+8:61/0 = 0
+9:61/0 = 0
+10:61/0 = 0
+11:61/0 = 0
+0:62/0 = 0
+1:62/0 = 0
+2:62/0 = 0
+3:62/0 = 0
+4:62/0 = 0
+5:62/0 = 0
+6:62/0 = 0
+7:62/0 = 0
+8:62/0 = 0
+9:62/0 = 0
+10:62/0 = 0
+0:63/0 = 0
+1:63/0 = 0
+2:63/0 = 0
+3:63/0 = 0
+4:63/0 = 0
+5:63/0 = 0
+6:63/0 = 0
+7:63/0 = 0
+8:63/0 = 0
+9:63/0 = 0
+10:63/0 = 0
+11:63/0 = 0
+0:64/0 = 0
+1:64/0 = 0
+2:64/0 = 0
+3:64/0 = 0
+4:64/0 = 0
+5:64/0 = 0
+6:64/0 = 0
+7:64/0 = 0
+8:64/0 = 0
+9:64/0 = 0
+10:64/0 = 0
+11:64/0 = 0
+0:65/0 = 0
+1:65/0 = 0
+2:65/0 = 0
+3:65/0 = 0
+4:65/0 = 0
+5:65/0 = 0
+0:66/0 = 0
+1:66/0 = 0
+2:66/0 = 0
+3:66/0 = 0
+4:66/0 = 0
+0:67/0 = 0
+1:67/0 = 0
+2:67/0 = 0
+3:67/0 = 0
+4:67/0 = 0
+18:67/0 = 0
+19:67/0 = 0
+7:32/0 = 0
+2:4/0 = 0
+4:1/0 = 0
+4:9/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h31hs"]
+texture = ExtResource("4_ddcbx")
+texture_region_size = Vector2i(8, 8)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+8:0/0 = 0
+8:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+9:0/0 = 0
+9:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+10:0/0 = 0
+10:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+8:1/0 = 0
+8:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+9:1/0 = 0
+9:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+10:1/0 = 0
+10:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+8:2/0 = 0
+8:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+9:2/0 = 0
+9:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+10:2/0 = 0
+10:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:3/0 = 0
+5:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+6:3/0 = 0
+6:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+8:3/0 = 0
+8:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+9:3/0 = 0
+9:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+10:3/0 = 0
+10:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+9:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+14:5/0 = 0
+15:5/0 = 0
+17:5/0 = 0
+19:5/0 = 0
+21:5/0 = 0
+22:5/0 = 0
+24:5/0 = 0
+25:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+7:6/0 = 0
+8:6/0 = 0
+9:6/0 = 0
+11:6/0 = 0
+12:6/0 = 0
+14:6/0 = 0
+15:6/0 = 0
+17:6/0 = 0
+19:6/0 = 0
+21:6/0 = 0
+22:6/0 = 0
+24:6/0 = 0
+25:6/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+8:8/0 = 0
+9:8/0 = 0
+10:8/0 = 0
+13:8/0 = 0
+14:8/0 = 0
+15:8/0 = 0
+16:8/0 = 0
+17:8/0 = 0
+18:8/0 = 0
+19:8/0 = 0
+20:8/0 = 0
+21:8/0 = 0
+22:8/0 = 0
+23:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+6:9/0 = 0
+7:9/0 = 0
+8:9/0 = 0
+9:9/0 = 0
+13:9/0 = 0
+14:9/0 = 0
+15:9/0 = 0
+16:9/0 = 0
+17:9/0 = 0
+18:9/0 = 0
+19:9/0 = 0
+20:9/0 = 0
+21:9/0 = 0
+22:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+5:10/0 = 0
+6:10/0 = 0
+7:10/0 = 0
+8:10/0 = 0
+13:10/0 = 0
+14:10/0 = 0
+15:10/0 = 0
+16:10/0 = 0
+17:10/0 = 0
+18:10/0 = 0
+19:10/0 = 0
+20:10/0 = 0
+21:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+6:11/0 = 0
+7:11/0 = 0
+8:11/0 = 0
+9:11/0 = 0
+10:11/0 = 0
+11:11/0 = 0
+12:11/0 = 0
+13:11/0 = 0
+14:11/0 = 0
+15:11/0 = 0
+16:11/0 = 0
+17:11/0 = 0
+18:11/0 = 0
+19:11/0 = 0
+20:11/0 = 0
+21:11/0 = 0
+22:11/0 = 0
+23:11/0 = 0
+24:11/0 = 0
+25:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+5:12/0 = 0
+6:12/0 = 0
+7:12/0 = 0
+8:12/0 = 0
+9:12/0 = 0
+10:12/0 = 0
+11:12/0 = 0
+12:12/0 = 0
+13:12/0 = 0
+14:12/0 = 0
+15:12/0 = 0
+16:12/0 = 0
+17:12/0 = 0
+18:12/0 = 0
+19:12/0 = 0
+20:12/0 = 0
+21:12/0 = 0
+22:12/0 = 0
+23:12/0 = 0
+24:12/0 = 0
+25:12/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+5:14/0 = 0
+6:14/0 = 0
+7:14/0 = 0
+8:14/0 = 0
+9:14/0 = 0
+13:14/0 = 0
+14:14/0 = 0
+15:14/0 = 0
+16:14/0 = 0
+17:14/0 = 0
+18:14/0 = 0
+19:14/0 = 0
+20:14/0 = 0
+21:14/0 = 0
+22:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+4:15/0 = 0
+5:15/0 = 0
+6:15/0 = 0
+7:15/0 = 0
+8:15/0 = 0
+9:15/0 = 0
+13:15/0 = 0
+14:15/0 = 0
+15:15/0 = 0
+16:15/0 = 0
+17:15/0 = 0
+18:15/0 = 0
+19:15/0 = 0
+20:15/0 = 0
+21:15/0 = 0
+22:15/0 = 0
+0:16/0 = 0
+1:16/0 = 0
+2:16/0 = 0
+3:16/0 = 0
+4:16/0 = 0
+5:16/0 = 0
+6:16/0 = 0
+7:16/0 = 0
+8:16/0 = 0
+13:16/0 = 0
+14:16/0 = 0
+15:16/0 = 0
+16:16/0 = 0
+17:16/0 = 0
+18:16/0 = 0
+19:16/0 = 0
+20:16/0 = 0
+21:16/0 = 0
+0:17/0 = 0
+1:17/0 = 0
+2:17/0 = 0
+3:17/0 = 0
+4:17/0 = 0
+5:17/0 = 0
+6:17/0 = 0
+7:17/0 = 0
+8:17/0 = 0
+9:17/0 = 0
+10:17/0 = 0
+11:17/0 = 0
+12:17/0 = 0
+13:17/0 = 0
+14:17/0 = 0
+15:17/0 = 0
+16:17/0 = 0
+17:17/0 = 0
+18:17/0 = 0
+19:17/0 = 0
+20:17/0 = 0
+21:17/0 = 0
+22:17/0 = 0
+23:17/0 = 0
+24:17/0 = 0
+25:17/0 = 0
+0:18/0 = 0
+1:18/0 = 0
+2:18/0 = 0
+3:18/0 = 0
+4:18/0 = 0
+5:18/0 = 0
+6:18/0 = 0
+7:18/0 = 0
+8:18/0 = 0
+9:18/0 = 0
+10:18/0 = 0
+11:18/0 = 0
+12:18/0 = 0
+13:18/0 = 0
+14:18/0 = 0
+15:18/0 = 0
+16:18/0 = 0
+17:18/0 = 0
+18:18/0 = 0
+19:18/0 = 0
+20:18/0 = 0
+21:18/0 = 0
+22:18/0 = 0
+23:18/0 = 0
+24:18/0 = 0
+25:18/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_qpmku"]
+tile_size = Vector2i(8, 8)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_wptqt")
+sources/2 = SubResource("TileSetAtlasSource_h31hs")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i2exo"]
+shader = ExtResource("8_yw2qb")
+shader_parameter/amount = 1.0
+
+[sub_resource type="GDScript" id="GDScript_67bvf"]
+script/source = "extends Sprite2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="Room_Green_3" type="Node2D" unique_id=884271656 node_paths=PackedStringArray("PlayerNode", "RoomSprite")]
+texture_filter = 1
+script = ExtResource("1_ddcbx")
+PlayerNode = NodePath("Player")
+RoomSprite = NodePath("-1/Sprite2D2")
+
+[node name="TileMapLayer" type="CanvasLayer" parent="." unique_id=1234567890]
+layer = -2
+visible = false
+
+[node name="TileMap" type="TileMap" parent="TileMapLayer" unique_id=248776512]
+position = Vector2(-1, -2)
+tile_set = SubResource("TileSet_qpmku")
+format = 2
+layer_0/tile_data = PackedInt32Array(3276800, 589826, 1, 3276801, 589826, 1, 3276802, 589826, 1, 3276803, 589826, 1, 3276804, 589826, 1, 3276805, 589826, 1, 3276806, 589826, 1, 3276807, 589826, 1, 3276808, 589826, 1, 3276809, 589826, 1, 3276810, 589826, 1, 3276811, 589826, 1, 3276812, 589826, 1, 3276813, 589826, 1, 3276814, 589826, 1, 3276815, 589826, 1, 3276816, 589826, 1, 3276817, 589826, 1, 3276818, 589826, 1, 3276819, 589826, 1, 3276820, 589826, 1, 3276821, 589826, 1, 3276822, 589826, 1, 3276823, 589826, 1, 3276824, 589826, 1, 3276825, 589826, 1, 3276826, 589826, 1, 3276827, 589826, 1, 3276828, 589826, 1, 3276829, 589826, 1, 3276830, 589826, 1, 3276831, 589826, 1, 3276832, 589826, 1, 3276833, 589826, 1, 3276834, 589826, 1, 3276835, 589826, 1, 3276836, 589826, 1, 3276837, 589826, 1, 3276838, 589826, 1, 3276839, 589826, 1, 3276840, 589826, 1, 3276841, 589826, 1, 3276842, 589826, 1, 3276843, 589826, 1, 3276844, 589826, 1, 3276845, 589826, 1, 3276846, 589826, 1, 3276847, 589826, 1, 3276848, 589826, 1, 3276849, 589826, 1, 3276850, 589826, 1, 3276851, 589826, 1, 3276852, 589826, 1, 3276853, 589826, 1, 3276854, 589826, 1, 3276855, 589826, 1, 3276856, 589826, 1, 3276857, 589826, 1, 3276858, 589826, 1, 3276859, 589826, 1, 3276860, 589826, 1, 3276861, 589826, 1, 3276862, 589826, 1, 3276863, 589826, 1, 3276864, 589826, 1, 3276865, 589826, 1, 3276866, 589826, 1, 3276867, 589826, 1, 3276868, 589826, 1, 3276869, 589826, 1, 3276870, 589826, 1, 3276871, 589826, 1, 3276872, 589826, 1, 3276873, 589826, 1, 3276874, 589826, 1, 3276875, 589826, 1, 3276876, 589826, 1, 3276877, 589826, 1, 3276878, 589826, 1, 3276879, 589826, 1, 3276880, 589826, 1, 3276881, 589826, 1, 3276882, 589826, 1, 3276883, 589826, 1, 3276884, 589826, 1, 3276885, 589826, 1, 3276886, 589826, 1, 3276887, 589826, 1, 3276888, 589826, 1, 3276889, 589826, 1, 3276890, 589826, 1, 3276891, 589826, 1, 3276892, 589826, 1, 3276893, 589826, 1, 3276894, 589826, 1, 3276895, 589826, 1, 3276896, 589826, 1, 3276897, 589826, 1, 3276898, 589826, 1, 3276899, 589826, 1, 3276900, 589826, 1, 3276901, 589826, 1, 3276902, 589826, 1, 3276903, 589826, 1, 3276904, 589826, 1, 3276905, 589826, 1, 3276906, 589826, 1, 3276907, 589826, 1, 3276908, 589826, 1, 3276909, 589826, 1, 3276910, 589826, 1, 3276911, 589826, 1, 3276912, 589826, 1, 3276913, 589826, 1, 3276914, 589826, 1, 3276915, 589826, 1, 3276916, 589826, 1, 3276917, 589826, 1, 3276918, 589826, 1, 3276919, 589826, 1, 3276920, 589826, 1, 3276921, 589826, 1, 3276922, 589826, 1, 3276923, 589826, 1, 3276924, 589826, 1, 3276925, 589826, 1, 3276926, 589826, 1, 3276927, 589826, 1, 3276928, 589826, 1, 3276929, 589826, 1, 3276930, 589826, 1, 3276931, 589826, 1, 3276932, 589826, 1, 3276933, 589826, 1, 3276934, 589826, 1, 3276935, 589826, 1, 3276936, 589826, 1, 3276937, 589826, 1, 3276938, 589826, 1, 3276939, 589826, 1, 3276940, 589826, 1, 3276941, 589826, 1, 3276942, 589826, 1, 3276943, 589826, 1)
+
+[node name="-3" type="CanvasLayer" parent="." unique_id=1066824741]
+layer = -1
+follow_viewport_enabled = true
+follow_viewport_scale = 0.7
+
+[node name="-2" type="CanvasLayer" parent="." unique_id=1448761137]
+layer = -1
+follow_viewport_enabled = true
+follow_viewport_scale = 0.8
+
+[node name="Moss0000Bmoss" type="Sprite2D" parent="-2" unique_id=1152055084]
+position = Vector2(168.75, 392.49997)
+scale = Vector2(0.70807695, 0.56045306)
+texture = ExtResource("5_ig60m")
+
+[node name="Moss0000Bmoss2" type="Sprite2D" parent="-2" unique_id=2050771535]
+position = Vector2(515, 392.5)
+scale = Vector2(0.70807695, 0.56045306)
+texture = ExtResource("5_ig60m")
+
+[node name="-1" type="CanvasLayer" parent="." unique_id=374493965]
+layer = -1
+follow_viewport_enabled = true
+follow_viewport_scale = 0.9
+
+[node name="MossClumpDepress010004" type="Sprite2D" parent="-1" unique_id=1817617081]
+position = Vector2(204.44447, 395.5555)
+scale = Vector2(0.739074, 0.6031332)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010005" type="Sprite2D" parent="-1" unique_id=86558454]
+position = Vector2(332.22217, 403.33334)
+scale = Vector2(0.739074, 0.6031332)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010006" type="Sprite2D" parent="-1" unique_id=1180273056]
+position = Vector2(452.22223, 400.00003)
+scale = Vector2(0.739074, 0.6031332)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010002" type="Sprite2D" parent="-1" unique_id=1751911448]
+position = Vector2(19.204536, 402.3381)
+scale = Vector2(0.739074, 0.6031332)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010003" type="Sprite2D" parent="-1" unique_id=1611754919]
+position = Vector2(-29.795456, 385.33804)
+scale = Vector2(0.739074, 0.6031332)
+texture = ExtResource("6_yw2qb")
+
+[node name="Sprite2D" type="Sprite2D" parent="-1" unique_id=211336285]
+material = SubResource("ShaderMaterial_i2exo")
+position = Vector2(219.09091, 268.18182)
+scale = Vector2(4.7795453, 1.5636363)
+texture = ExtResource("9_kra8n")
+script = SubResource("GDScript_67bvf")
+
+[node name="Sprite2D2" type="Sprite2D" parent="-1" unique_id=1379652374]
+modulate = Color(0.21568628, 0.30980393, 0.17254902, 0.40784314)
+position = Vector2(468.78784, 277.8788)
+scale = Vector2(7.421212, 4.0878787)
+texture = ExtResource("9_kra8n")
+
+[node name="0" type="CanvasLayer" parent="." unique_id=1851897967]
+layer = -1
+follow_viewport_enabled = true
+
+[node name="Moss0015WeaverPlaqueSide" type="Sprite2D" parent="0" unique_id=17270412]
+position = Vector2(554.5, 425.00003)
+scale = Vector2(7.9683547, 2.5421436)
+texture = ExtResource("7_kra8n")
+
+[node name="1" type="CanvasLayer" parent="." unique_id=638085027]
+layer = -1
+follow_viewport_enabled = true
+follow_viewport_scale = 1.1
+
+[node name="Moss0000Bmoss" type="Sprite2D" parent="1" unique_id=847453717]
+position = Vector2(361, 482)
+scale = Vector2(0.7848703, 0.6679617)
+texture = ExtResource("5_ig60m")
+
+[node name="Moss0000Bmoss2" type="Sprite2D" parent="1" unique_id=1848522419]
+position = Vector2(23, 470)
+scale = Vector2(0.7848703, 0.6679617)
+texture = ExtResource("5_ig60m")
+
+[node name="Moss0000Bmoss3" type="Sprite2D" parent="1" unique_id=1210033769]
+position = Vector2(701, 475)
+scale = Vector2(0.7848703, 0.6679617)
+texture = ExtResource("5_ig60m")
+
+[node name="2" type="CanvasLayer" parent="." unique_id=1183920718]
+layer = -1
+follow_viewport_enabled = true
+follow_viewport_scale = 1.2
+
+[node name="MossClumpDepressCurvy0000" type="Sprite2D" parent="2" unique_id=3574783]
+position = Vector2(156, 457)
+scale = Vector2(0.80225146, 0.69311225)
+texture = ExtResource("9_67bvf")
+
+[node name="MossClumpDepressCurvy0001" type="Sprite2D" parent="2" unique_id=986522914]
+position = Vector2(88, 439)
+scale = Vector2(0.80225146, 0.69311225)
+texture = ExtResource("9_67bvf")
+
+[node name="MossClumpDepressCurvy0002" type="Sprite2D" parent="2" unique_id=1543294925]
+position = Vector2(592, 443)
+scale = Vector2(0.80225146, 0.69311225)
+texture = ExtResource("9_67bvf")
+
+[node name="MossClumpDepressCurvy0003" type="Sprite2D" parent="2" unique_id=519505925]
+position = Vector2(1036, 437)
+scale = Vector2(0.80225146, 0.69311225)
+texture = ExtResource("9_67bvf")
+
+[node name="MossClumpDepressCurvy0004" type="Sprite2D" parent="2" unique_id=1776310059]
+position = Vector2(778, 446)
+scale = Vector2(0.80225146, 0.69311225)
+texture = ExtResource("9_67bvf")
+
+[node name="MossClumpDepressCurvy0005" type="Sprite2D" parent="2" unique_id=1375836583]
+position = Vector2(263, 438)
+scale = Vector2(0.80225146, 0.69311225)
+texture = ExtResource("9_67bvf")
+
+[node name="3" type="CanvasLayer" parent="." unique_id=44774671]
+layer = -1
+follow_viewport_enabled = true
+follow_viewport_scale = 1.3
+
+[node name="Sprite2D" type="Sprite2D" parent="3" unique_id=1722679748]
+modulate = Color(0.36078432, 0.36078432, 0.36078432, 1)
+
+[node name="MossClumpDepress010002" type="Sprite2D" parent="3/Sprite2D" unique_id=22379674]
+position = Vector2(38, 443)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010003" type="Sprite2D" parent="3/Sprite2D" unique_id=145736189]
+position = Vector2(174, 442)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010004" type="Sprite2D" parent="3/Sprite2D" unique_id=1215201425]
+position = Vector2(342, 436)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010005" type="Sprite2D" parent="3/Sprite2D" unique_id=2039556217]
+position = Vector2(682, 440)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010006" type="Sprite2D" parent="3/Sprite2D" unique_id=1869516340]
+position = Vector2(780, 455)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010007" type="Sprite2D" parent="3/Sprite2D" unique_id=352133788]
+position = Vector2(898, 440)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010008" type="Sprite2D" parent="3/Sprite2D" unique_id=943134903]
+position = Vector2(655, 472)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010009" type="Sprite2D" parent="3/Sprite2D" unique_id=1774905656]
+position = Vector2(991, 448)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="MossClumpDepress010010" type="Sprite2D" parent="3/Sprite2D" unique_id=823211898]
+position = Vector2(1071, 441)
+scale = Vector2(0.8170434, 0.71475124)
+texture = ExtResource("6_yw2qb")
+
+[node name="Player" parent="." unique_id=1984405756 instance=ExtResource("4_uojkq")]
+position = Vector2(210, 337)
