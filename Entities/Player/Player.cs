@@ -129,7 +129,7 @@ public partial class Player : CharacterBody2D
 		if (_isDashing)
 		{
 			if (_animatedSprite.Animation != "dash")
-    		_animatedSprite.Play("dash");
+			_animatedSprite.Play("dash");
 			_dashTimer -= fDelta;
 
 			velocity.Y = 0;
@@ -218,10 +218,10 @@ public partial class Player : CharacterBody2D
 			if (TryStartDash(direction, ref velocity))
 			{
 				_audioJump.Play();
-        		Velocity = velocity;
-        		MoveAndSlide();
-        		return;
-    		}
+				Velocity = velocity;
+				MoveAndSlide();
+				return;
+			}
 		}
 
 		// Аудіо ходьби
