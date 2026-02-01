@@ -26,6 +26,19 @@ public partial class Player : CharacterBody2D
 
 	// Шлях до початкової сцени гри
 	[Export] private string gameStartPath = "res://Levels/Room1/Room1.tscn";
+	[ExportGroup("Dash")]
+	[Export] public float DashSpeed = 650f;
+	[Export] public float DashDuration = 0.12f;
+	[Export] public float DashCooldown = 0.15f; 
+
+	[ExportGroup("Wall Slide")]
+	[Export] public float WallSlideMaxFallSpeed = 120f;
+	[Export] public float WallSlideStickFriction = 2000f;
+
+	[ExportGroup("Wall Jump")]
+	[Export] public float WallJumpVertical = -450.0f;
+	[Export] public float WallJumpHorizontal = 350.0f;
+	[Export] public float WallJumpLockTime = 0.12f;
 
 	public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
@@ -35,12 +48,21 @@ public partial class Player : CharacterBody2D
 	private bool _isDead = false;
 	private bool _isInCutscene = false;
 	private bool _isStunned = false;
+	private bool _isDashing = false;
+	private bool _dashAvailableInAir = true;
+	private bool _isWallSliding = false;
+
 	private int _jumpCount = 0;
 	private float _stunTimer = 0.0f;
+
+	private float _dashTimer = 0f;
+	private float _dashCooldownTimer = 0f;
 
 	// Невразливість та мерехтіння
 	private bool _isBlinking = false;
 	private float _blinkTimer = 0.0f;
+
+	private float _wallJumpLockTimer = 0.0f;
 
 	// Вузли
 	private AnimatedSprite2D _animatedSprite;
@@ -53,6 +75,11 @@ public partial class Player : CharacterBody2D
 	private AudioStreamPlayer2D _audioJump;
 	private AudioStreamPlayer2D _audioAttack;
 	private AudioStreamPlayer2D _audioHurt;
+
+	// Ray
+	private RayCast2D _wallRayLeft;
+	private RayCast2D _wallRayRight;
+
 
 	public override void _Ready()
 	{
@@ -79,7 +106,8 @@ public partial class Player : CharacterBody2D
 		_hurtbox.InvincibilityStarted += OnInvincibilityStarted;
 		_hurtbox.InvincibilityEnded += OnInvincibilityEnded;
 		
-		
+		_wallRayLeft = GetNode<RayCast2D>("WallRayLeft");
+		_wallRayRight = GetNode<RayCast2D>("WallRayRight");
 	}
 
 
@@ -89,6 +117,9 @@ public partial class Player : CharacterBody2D
 
 		Vector2 velocity = Velocity;
 		float fDelta = (float)delta;
+
+		_wallJumpLockTimer -= fDelta;
+		_dashCooldownTimer -= fDelta;
 
 		if (_swordHitbox != null) _swordHitbox.Monitoring = _isAttacking;
 		if (_swordHitboxDown != null) _swordHitboxDown.Monitoring = _isDownAttacking;
@@ -120,6 +151,30 @@ public partial class Player : CharacterBody2D
 			ResetAttackState();
 		}
 
+		// --- DASH ---
+		if (_isDashing)
+		{
+			if (_animatedSprite.Animation != "dash")
+			_animatedSprite.Play("dash");
+			_dashTimer -= fDelta;
+
+			velocity.Y = 0;
+
+			Velocity = velocity;
+			MoveAndSlide();
+
+			if (_dashTimer <= 0)
+			{
+				_isDashing = false;
+				_dashCooldownTimer = DashCooldown;
+
+				if (IsOnFloor())
+					_animatedSprite.Play(Mathf.Abs(Velocity.X) > 10 ? "run" : "idle");
+				else
+					_animatedSprite.Play("jump");
+			}
+			return;
+		}
 
 		// 3. Атака
 		if (_isAttacking)
@@ -149,22 +204,89 @@ public partial class Player : CharacterBody2D
 
 
 		// 4. Рух
-		if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
-		else _jumpCount = 0;
-
-		if (Input.IsActionJustPressed("ui_accept") && (IsOnFloor() || _jumpCount < MaxJumps))
-		{
-			velocity.Y = JumpVelocity;
-			_jumpCount++;
-			_audioJump.PitchScale = (float)GD.RandRange(0.9, 1.1);
-			_audioJump.Play();
-		}
+		_isWallSliding = false;
 
 		float direction = Input.GetAxis("ui_left", "ui_right");
-		if (direction != 0)
-			 velocity.X = Mathf.MoveToward(Velocity.X, direction * Speed, Acceleration * fDelta);
+
+		if (!IsOnFloor())
+		{
+			velocity.Y += Gravity * fDelta;
+		}
 		else
-			 velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
+		{
+			_jumpCount = 0;
+			_dashAvailableInAir = true;
+		}
+
+		int wallSide = GetWallSide();
+
+		bool touchingWall =
+			!IsOnFloor() &&
+			wallSide != 0 &&
+			_wallJumpLockTimer <= 0f;
+
+		bool pressingAway =
+			(wallSide == -1 && direction > 0) ||
+			(wallSide ==  1 && direction < 0);
+
+		bool canWallSlide =
+			touchingWall &&
+			velocity.Y > 0 &&
+			!pressingAway;
+
+		bool didWallJump = false;
+
+		if (Input.IsActionJustPressed("ui_accept"))
+		{
+			if (touchingWall && velocity.Y > 0)
+			{
+				int pushDir = -wallSide;
+
+				velocity.Y = WallJumpVertical;
+				velocity.X = pushDir * WallJumpHorizontal;
+
+				_wallJumpLockTimer = WallJumpLockTime;
+				_isWallSliding = false;
+
+				_jumpCount = 1;
+				_dashAvailableInAir = true;
+
+				_animatedSprite.FlipH = pushDir < 0;
+
+				_audioJump.PitchScale = (float)GD.RandRange(0.9, 1.1);
+				_audioJump.Play();
+
+				didWallJump = true;
+			}
+			else if (IsOnFloor() || _jumpCount < MaxJumps)
+			{
+				velocity.Y = JumpVelocity;
+				_jumpCount++;
+
+				_audioJump.PitchScale = (float)GD.RandRange(0.9, 1.1);
+				_audioJump.Play();
+			}
+		}
+
+		if (!didWallJump)
+		{
+			if (direction != 0)
+				velocity.X = Mathf.MoveToward(velocity.X, direction * Speed, Acceleration * fDelta);
+			else
+				velocity.X = Mathf.MoveToward(velocity.X, 0, Friction * fDelta);
+		}
+
+		if (canWallSlide)
+		{
+			_isWallSliding = true;
+
+			_animatedSprite.FlipH = (wallSide == 1);
+
+			velocity.Y = Mathf.Min(velocity.Y, WallSlideMaxFallSpeed);
+			velocity.X = Mathf.MoveToward(velocity.X, 0, WallSlideStickFriction * fDelta);
+		}
+
+
 
 		if (Input.IsActionJustPressed("attack"))
 		{
@@ -175,6 +297,17 @@ public partial class Player : CharacterBody2D
 			else
 			{
 				StartAttack();
+			}
+		}
+
+		if (Input.IsActionJustPressed("dash"))
+		{
+			if (TryStartDash(direction, ref velocity))
+			{
+				_audioJump.Play();
+				Velocity = velocity;
+				MoveAndSlide();
+				return;
 			}
 		}
 
@@ -302,6 +435,7 @@ public partial class Player : CharacterBody2D
 
 			// Скидаємо лічильник стрибків, щоб можна було стрибати знову
 			_jumpCount = 1;
+			_dashAvailableInAir = true;
 		}
 	}
 
@@ -352,7 +486,13 @@ public partial class Player : CharacterBody2D
 
 	private void UpdateAnimation(float direction, Vector2 velocity)
 	{
-		if (_isAttacking || _isDownAttacking || _isDead || _isStunned) return;
+		if (_isAttacking || _isDownAttacking || _isDashing || _isDead || _isStunned) return;
+
+		if (_isWallSliding)
+		{
+			_animatedSprite.Play("wall_slide");
+			return;
+		}
 		
 		if (direction > 0) 
 		{ 
@@ -379,8 +519,46 @@ public partial class Player : CharacterBody2D
 		_swordHitbox.Monitoring = false;
 		_swordHitboxDown.Monitoring = false;
 	}
-	
-	
+
+	private bool TryStartDash(float inputDir, ref Vector2 velocity)
+	{
+		if (_isDead) return false;
+		if (_dashCooldownTimer > 0f) return false;
+		if (_isAttacking || _isDownAttacking) return false;
+		if (_stunTimer > 0f) return false;
+
+		if (!IsOnFloor() && !_dashAvailableInAir) return false;
+
+		float dir;
+		if (!Mathf.IsZeroApprox(inputDir)) dir = Mathf.Sign(inputDir);
+		else dir = _animatedSprite.FlipH ? -1f : 1f;
+
+		if (_isWallSliding)
+		{
+			int wallSide = GetWallSide();
+			if (wallSide != 0 && Mathf.Sign(dir) == wallSide)
+				return false;
+		}
+
+		_isDashing = true;
+		_dashTimer = DashDuration;
+
+		if (!IsOnFloor())
+			_dashAvailableInAir = false;
+
+		velocity.X = dir * DashSpeed;
+		velocity.Y = 0;
+
+		return true;
+	}
+
+	private bool IsFacingWall()
+	{
+		RayCast2D ray = _animatedSprite.FlipH ? _wallRayLeft : _wallRayRight;
+		ray.ForceRaycastUpdate();
+		return ray.IsColliding();
+	}	
+
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventKey keyEvent && keyEvent.IsPressed() && !keyEvent.IsEcho())
@@ -407,5 +585,16 @@ public partial class Player : CharacterBody2D
 		{
 			_audioWalk.Stop();
 		}
+	}
+
+	private int GetWallSide()
+	{
+		_wallRayLeft.ForceRaycastUpdate();
+		_wallRayRight.ForceRaycastUpdate();
+
+		if (_wallRayLeft.IsColliding()) return -1;
+		if (_wallRayRight.IsColliding()) return 1;
+
+		return 0;
 	}
 }

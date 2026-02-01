@@ -3,6 +3,10 @@ using System;
 
 public partial class Frog : CharacterBody2D
 {
+	[ExportGroup("AntiStack")]
+	[Export] public float SlideOffSpeed = 140f;
+	[Export] public float SlideOffDuration = 0.25f;
+
 	[ExportGroup("Components")]
 	[Export] public HealthComponent HealthComp;
 
@@ -38,6 +42,9 @@ public partial class Frog : CharacterBody2D
 	private Node2D _target = null;
 	private bool _justJumped = false;
 
+	private float _slideOffTimer = 0f;
+	private float _slideOffDir = 0f;
+
 	public override void _Ready()
 	{
 		string myID = GetUniqueID();
@@ -72,24 +79,33 @@ public partial class Frog : CharacterBody2D
 	}
 
 	public override void _PhysicsProcess(double delta)
-	{   
-		if (_currentState == FrogState.Dead) return;
+	{
+		if (_currentState == FrogState.Dead)
+		{
+			Velocity = Vector2.Zero;
+			UpdateAnimation();
+			return;
+		}
 
 		float fDelta = (float)delta;
 		Vector2 velocity = Velocity;
 
-		if (!IsOnFloor())
+		if (_slideOffTimer > 0f)
 		{
-			velocity.Y += Gravity * fDelta;
+			_slideOffTimer -= fDelta;
+			velocity.X = _slideOffDir * SlideOffSpeed; // примусово з’їжджаємо
 		}
+
+		if (!IsOnFloor())
+			velocity.Y += Gravity * fDelta;
 
 		switch (_currentState)
 		{
 			case FrogState.Idle:
-				velocity.X = 0;
+				if (_slideOffTimer <= 0f) velocity.X = 0;
 				ProcessIdle(fDelta);
 				break;
-				
+
 			case FrogState.Jump:
 				if (_justJumped)
 				{
@@ -109,16 +125,16 @@ public partial class Frog : CharacterBody2D
 					velocity.X = ProcessJump(velocity);
 				}
 				break;
-				
+
 			case FrogState.Chase:
 				velocity.X = ProcessChase();
 				break;
-				
+
 			case FrogState.Attack:
 				velocity.X = 0;
 				ProcessAttack(fDelta);
 				break;
-				
+
 			case FrogState.Hurt:
 				velocity.X = Mathf.MoveToward(velocity.X, 0, 800.0f * fDelta);
 				ProcessHurt(fDelta);
@@ -128,9 +144,12 @@ public partial class Frog : CharacterBody2D
 		Velocity = velocity;
 		MoveAndSlide();
 
+		TryStartSlideOff();
+
 		UpdateAnimation();
 		UpdateFacingDirection();
 	}
+
 
 	private string GetUniqueID()
 	{
@@ -186,26 +205,23 @@ public partial class Frog : CharacterBody2D
 	private void OnDeath()
 	{
 		if (_currentState == FrogState.Dead) return;
-		
-		if (GameManager.Instance != null)
-		{
-			GameManager.Instance.RegisterDeath(GetUniqueID());
-		}
-		
+
 		_currentState = FrogState.Dead;
-		
+
+		Velocity = Vector2.Zero;
+		_sprite.Play("explosion");
+
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
 		_detectionArea.SetDeferred("monitoring", false);
 		_tongueHitbox.SetDeferred("monitoring", false);
 		_tongueHitboxExtended.SetDeferred("monitoring", false);
-		
-		GD.Print("Жаба мертва ааааа шкода");
-		
-		GetTree().CreateTimer(2.0f).Timeout += () => 
+
+		GetTree().CreateTimer(2.0f).Timeout += () =>
 		{
 			if (IsInstanceValid(this)) QueueFree();
 		};
-	}
+}
+
 
 	private void InitiateJump()
 	{
@@ -315,15 +331,8 @@ public partial class Frog : CharacterBody2D
 			if (_target != null)
 			{
 				float distanceToPlayer = Mathf.Abs(_target.GlobalPosition.X - GlobalPosition.X);
-				if (distanceToPlayer <= TongueReach)
-				{
-					SwitchToAttack();
-				}
-				else
-				{
-					_currentState = FrogState.Chase;
-					_stateTimer = ChaseIdleTime;
-				}
+				_currentState = FrogState.Chase;
+				_stateTimer = 0.05f;
 			}
 			else
 			{
@@ -420,4 +429,34 @@ public partial class Frog : CharacterBody2D
 		
 		GD.Print("Джяябааа атакує язикомб ухтишка");
 	}
+
+	private void TryStartSlideOff()
+	{
+		if (!IsOnFloor()) return;
+
+		for (int i = 0; i < GetSlideCollisionCount(); i++)
+		{
+			var col = GetSlideCollision(i);
+
+			if (col.GetNormal().Y < -0.9f)
+			{
+				var collider = col.GetCollider();
+				if (collider is Node colliderNode && colliderNode.IsInGroup("Enemy"))
+				{
+					float dir = 1f;
+					if (collider is Node2D other)
+					{
+						dir = Mathf.Sign(GlobalPosition.X - other.GlobalPosition.X);
+						if (Mathf.IsZeroApprox(dir))
+							dir = GD.Randf() < 0.5f ? -1f : 1f;
+					}
+
+					_slideOffDir = dir;
+					_slideOffTimer = SlideOffDuration;
+					return;
+				}
+			}
+		}
+	}
+
 }
