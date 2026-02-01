@@ -3,6 +3,7 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
+	[Export] public PauseMenu PauseMenu;
 	[ExportGroup("Components")]
 	[Export] public HealthComponent HealthComp; // Посилання на компонент здоров'я
 	
@@ -84,7 +85,10 @@ public partial class Player : CharacterBody2D
 		_hurtbox.HitReceived += TakeHitLogic;
 		_hurtbox.InvincibilityStarted += OnInvincibilityStarted;
 		_hurtbox.InvincibilityEnded += OnInvincibilityEnded;
+		
+		
 	}
+
 
 	public override void _PhysicsProcess(double delta)
 	{
