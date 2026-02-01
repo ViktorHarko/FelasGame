@@ -24,6 +24,9 @@ public partial class Player : CharacterBody2D
 	[ExportGroup("Invincibility Visual")]
 	[Export] public float BlinkInterval = 0.1f; // Швидкість блимання
 
+	// Шлях до початкової сцени гри
+	[Export] private string gameStartPath = "res://Levels/Room1/Room1.tscn";
+
 	public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	// Стан
@@ -330,7 +333,21 @@ public partial class Player : CharacterBody2D
 			ResetAttackState();
 			_animatedSprite.Play("idle");
 		}
-		if (_animatedSprite.Animation == "death") GetTree().ReloadCurrentScene();
+		if (_animatedSprite.Animation == "death")
+		{
+			// Повний рестарт гри (як кнопка Restart)
+			if (GameManager.Instance != null)
+			{
+				GameManager.Instance.ResetGame();
+				// Завантажуємо збережену сцену (або стартову якщо немає збереження)
+				string respawnScene = GameManager.Instance.GetRespawnScenePath();
+				GetTree().ChangeSceneToFile(respawnScene);
+			}
+			else
+			{
+				GetTree().ChangeSceneToFile(gameStartPath);
+			}
+		}
 	}
 
 	private void UpdateAnimation(float direction, Vector2 velocity)

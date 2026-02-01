@@ -6,6 +6,7 @@ public partial class PauseMenu : Control
 	[Export] private string menuPath = "res://Menu/MainMenu.tscn";
 	[Export] private Button resumeButton;
 	[Export] private Button restartButton;
+	[Export] private Button saveButton;
 	[Export] private Button quitButton;
 	public override void _Ready()
 	{
@@ -17,8 +18,11 @@ public partial class PauseMenu : Control
 
 		restartButton = GetNode<Button>("PanelContainer/VBoxContainer/Button2");
 		restartButton.Pressed += OnRestartPressed;
+		
+		saveButton = GetNode<Button>("PanelContainer/VBoxContainer/Button3");
+		saveButton.Pressed += OnSavePressed;
 
-		quitButton = GetNode<Button>("PanelContainer/VBoxContainer/Button3");
+		quitButton = GetNode<Button>("PanelContainer/VBoxContainer/Quit");
 		quitButton.Pressed += OnQuitPressed;
 		
 		resumeButton.GrabFocus();
@@ -27,7 +31,7 @@ public partial class PauseMenu : Control
 	public override void _Process(double delta)
 	{
 		// Якщо зараз жодна кнопка не у фокусі, ставимо на першу
-		if (!resumeButton.HasFocus() && !restartButton.HasFocus() && !quitButton.HasFocus())
+		if (!resumeButton.HasFocus() && !restartButton.HasFocus() && !quitButton.HasFocus() && !saveButton.HasFocus())
 		{
 			resumeButton.GrabFocus();
 		}
@@ -45,6 +49,18 @@ public partial class PauseMenu : Control
 		
 	}
 
+	private void OnSavePressed()
+	{
+		if (GameManager.Instance != null)
+		{
+			// Отримуємо шлях поточної сцени
+			string currentScene = GetTree().CurrentScene.SceneFilePath;
+			GameManager.Instance.SaveGame(currentScene);
+			GD.Print($"Гру збережено: {currentScene}");
+			TogglePause(false);
+		}
+	}
+
 	private void OnQuitPressed()
 	{
 		TogglePause(false);
@@ -58,6 +74,7 @@ public partial class PauseMenu : Control
 		}
 	}
 
+	
 	/// <summary>
 	/// Метод для показу/сховання паузи
 	/// </summary>
@@ -66,4 +83,6 @@ public partial class PauseMenu : Control
 		Visible = pause;
 		GetTree().Paused = pause;
 	}
+	
+	
 }

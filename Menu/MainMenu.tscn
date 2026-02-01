@@ -56,23 +56,33 @@ process_mode = 3
 layout_mode = 2
 focus_neighbor_left = NodePath("../exitButton")
 focus_neighbor_top = NodePath("../exitButton")
-focus_neighbor_right = NodePath("../exitButton")
-focus_neighbor_bottom = NodePath("../exitButton")
-focus_next = NodePath("../exitButton")
+focus_neighbor_right = NodePath("../Continue")
+focus_neighbor_bottom = NodePath("../Continue")
+focus_next = NodePath("../Continue")
 focus_previous = NodePath("../exitButton")
-mouse_filter = 2
 theme_override_font_sizes/font_size = 32
 text = "New Game"
 
-[node name="exitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=152615792]
+[node name="Continue" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=182892640]
 process_mode = 3
 layout_mode = 2
 focus_neighbor_left = NodePath("../newGameButton")
 focus_neighbor_top = NodePath("../newGameButton")
+focus_neighbor_right = NodePath("../exitButton")
+focus_neighbor_bottom = NodePath("../exitButton")
+focus_next = NodePath("../exitButton")
+focus_previous = NodePath("../newGameButton")
+theme_override_font_sizes/font_size = 36
+text = "Continue"
+
+[node name="exitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer" unique_id=152615792]
+process_mode = 3
+layout_mode = 2
+focus_neighbor_left = NodePath("../Continue")
+focus_neighbor_top = NodePath("../Continue")
 focus_neighbor_right = NodePath("../newGameButton")
 focus_neighbor_bottom = NodePath("../newGameButton")
 focus_next = NodePath("../newGameButton")
-focus_previous = NodePath("../newGameButton")
-mouse_filter = 2
+focus_previous = NodePath("../Continue")
 theme_override_font_sizes/font_size = 32
 text = "Quit"
