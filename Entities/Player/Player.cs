@@ -108,6 +108,8 @@ public partial class Player : CharacterBody2D
 		
 		_wallRayLeft = GetNode<RayCast2D>("WallRayLeft");
 		_wallRayRight = GetNode<RayCast2D>("WallRayRight");
+		
+		PauseMenu = GetNode<PauseMenu>("CanvasLayer2/PauseMenu");
 	}
 
 
