@@ -19,8 +19,8 @@ public partial class HealthUI : Control
 		{
 			HealthComponent.HealthChanged += OnHealthChanged;
 
-			// Встановлюємо початкове значення
-			OnHealthChanged(HealthComponent.MaxHealth, HealthComponent.MaxHealth);
+			// Встановлюємо початкове значення з реальним здоров'ям
+			OnHealthChanged(HealthComponent.CurrentHealth, HealthComponent.MaxHealth);
 		}
 		else
 		{

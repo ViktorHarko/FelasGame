@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://dmvc5g6b5dngk"]
+
+[ext_resource type="Texture2D" uid="uid://idhomlrugfii" path="res://test_assets/FurmanFight.png" id="1_o3tng"]
+[ext_resource type="Texture2D" uid="uid://cnawwqxj2tvcn" path="res://test_assets/FurmanGo.png" id="2_sbaq2"]
+[ext_resource type="Texture2D" uid="uid://dtbetk48spe0p" path="res://test_assets/Furman360.png" id="3_rdc5i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oib73"]
+atlas = ExtResource("1_o3tng")
+region = Rect2(0, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3oihi"]
+atlas = ExtResource("1_o3tng")
+region = Rect2(56, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5h0pt"]
+atlas = ExtResource("1_o3tng")
+region = Rect2(112, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4awcb"]
+atlas = ExtResource("1_o3tng")
+region = Rect2(168, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0emgo"]
+atlas = ExtResource("1_o3tng")
+region = Rect2(224, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ntoy"]
+atlas = ExtResource("1_o3tng")
+region = Rect2(280, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ona26"]
+atlas = ExtResource("2_sbaq2")
+region = Rect2(0, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lbvew"]
+atlas = ExtResource("2_sbaq2")
+region = Rect2(56, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pn16k"]
+atlas = ExtResource("2_sbaq2")
+region = Rect2(112, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7h2h7"]
+atlas = ExtResource("2_sbaq2")
+region = Rect2(168, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vo0cg"]
+atlas = ExtResource("2_sbaq2")
+region = Rect2(224, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kr756"]
+atlas = ExtResource("2_sbaq2")
+region = Rect2(280, 0, 56, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngw5w"]
+atlas = ExtResource("3_rdc5i")
+region = Rect2(56, 0, 56, 56)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nt4bw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oib73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3oihi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5h0pt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4awcb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0emgo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ntoy")
+}],
+"loop": true,
+"name": &"fight",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ona26")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lbvew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pn16k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7h2h7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vo0cg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kr756")
+}],
+"loop": true,
+"name": &"go",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngw5w")
+}],
+"loop": true,
+"name": &"stand",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ps6w6"]
+size = Vector2(15, 47)
+
+[node name="Furman" type="CharacterBody2D" unique_id=1529845796]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1928134426]
+sprite_frames = SubResource("SpriteFrames_nt4bw")
+animation = &"fight"
+frame = 2
+frame_progress = 0.3329347
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1160229607]
+position = Vector2(0.5, 4)
+shape = SubResource("RectangleShape2D_ps6w6")

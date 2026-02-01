@@ -337,7 +337,7 @@ shape = SubResource("RectangleShape2D_kyqiw")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1100763070]
 position = Vector2(1, 0)
-zoom = Vector2(2.5, 2.5)
+zoom = Vector2(4, 4)
 limit_left = 0
 limit_top = 0
 limit_right = 946
@@ -381,6 +381,7 @@ stream = ExtResource("4_dewec")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=129476022]
 script = ExtResource("8_bhhdu")
+IsPlayer = true
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1010765740 node_paths=PackedStringArray("HealthComponent")]
 collision_layer = 2

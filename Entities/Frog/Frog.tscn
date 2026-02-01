@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlpvtdqgujs7a"]
 
-[ext_resource type="Script" uid="uid://ntg1ujqpig18" path="res://Entities/Frog/Frog.cs" id="1_701hk"]
+[ext_resource type="Script" uid="uid://qya5augli84d" path="res://Entities/Frog/Frog.cs" id="1_701hk"]
 [ext_resource type="Script" uid="uid://chbkqgvtx86y3" path="res://Scripts/Components/Hitbox.cs" id="2_bn22t"]
 [ext_resource type="Script" uid="uid://cwvf276dmm55a" path="res://Scripts/Components/HealthComponent.cs" id="3_dqu75"]
 [ext_resource type="Script" uid="uid://m8sy74p7444o" path="res://Scripts/Components/Hurtbox.cs" id="4_u8s84"]

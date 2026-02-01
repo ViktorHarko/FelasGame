@@ -42,4 +42,9 @@ text = "Restart"
 [node name="Button3" type="Button" parent="PanelContainer/VBoxContainer" unique_id=356403654]
 process_mode = 3
 layout_mode = 2
+text = "Save"
+
+[node name="Quit" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1848252398]
+process_mode = 3
+layout_mode = 2
 text = "Quit"
