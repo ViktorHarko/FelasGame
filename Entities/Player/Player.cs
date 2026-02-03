@@ -13,6 +13,7 @@ public partial class Player : CharacterBody2D
 	[Export] public float Acceleration = 1500.0f;
 	[Export] public float Friction = 1200.0f;
 	[Export] public int MaxJumps = 2;
+	[Export] public float JumpCutoff = 0.6f; // Коефіцієнт зрізу (0.5 - 0.6 це гарний баланс)
 
 	[ExportGroup("Combat")]
 	[Export] public float KnockbackForce = 300.0f;
@@ -220,6 +221,25 @@ public partial class Player : CharacterBody2D
 			_dashAvailableInAir = true;
 		}
 
+		// jump scale
+		_isWallSliding = false;
+
+		//float direction = Input.GetAxis("ui_left", "ui_right");
+
+		if (!IsOnFloor())
+		{
+			velocity.Y += Gravity * fDelta;
+		}
+		
+		if (Input.IsActionJustReleased("ui_accept") && velocity.Y < 0)
+		{
+			// Ми "зрізаємо" вертикальну швидкість, множачи її на коефіцієнт (напр. 0.6)
+			// Це змушує гравітацію зупинити персонажа набагато раніше.
+			velocity.Y *= JumpCutoff; 
+		}
+
+
+
 		int wallSide = GetWallSide();
 
 		bool touchingWall =
@@ -287,6 +307,7 @@ public partial class Player : CharacterBody2D
 			velocity.Y = Mathf.Min(velocity.Y, WallSlideMaxFallSpeed);
 			velocity.X = Mathf.MoveToward(velocity.X, 0, WallSlideStickFriction * fDelta);
 		}
+		
 
 
 
