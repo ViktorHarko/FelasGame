@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Felas"
-run/main_scene="uid://bjdv03gb10fd3"
+run/main_scene="uid://80odxoccxih2"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
 config/icon="res://icon.svg"
 
@@ -58,6 +58,10 @@ Jump={
 "deadzone": 0.2,
 "events": []
 }
+
+[physics]
+
+common/physics_interpolation=true
 
 [rendering]
 

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://daiemn4dyb60p"]
+
+[ext_resource type="Script" uid="uid://dddevq16lvmvs" path="res://Scenes/CameraLimiter/CameraLimiter.cs" id="1_gfxdk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gfxdk"]
+size = Vector2(1162, 658)
+
+[node name="CameraLimiter" type="Area2D"]
+z_index = 100
+script = ExtResource("1_gfxdk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(571, 319)
+shape = SubResource("RectangleShape2D_gfxdk")
