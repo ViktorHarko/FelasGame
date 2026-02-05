@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://cflc5dt0v5qin"]
+[gd_scene format=3 uid="uid://cflc5dt0v5qin"]
 
 [ext_resource type="Texture2D" uid="uid://bgchwbue30mxb" path="res://test_assets/character/hand attack.png" id="2_5m37j"]
 [ext_resource type="Texture2D" uid="uid://dfbb0vof4a7ks" path="res://test_assets/Boy_Adventure A1.png" id="2_gntrk"]
@@ -395,18 +395,18 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kyqiw"]
-size = Vector2(49, 54)
+size = Vector2(24, 49)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qidb7"]
 size = Vector2(33, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yoq75"]
-size = Vector2(49, 54)
+size = Vector2(24, 49)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hacra"]
 size = Vector2(40, 25)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("HealthComp") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" unique_id=1290798182 node_paths=PackedStringArray("HealthComp") groups=["Player"]]
 collision_layer = 2
 script = ExtResource("2_kyqiw")
 HealthComp = NodePath("HealthComponent")
@@ -414,87 +414,85 @@ Speed = 150.0
 JumpCutoff = 0.2
 DashDuration = 0.1
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=133029227]
 position = Vector2(0, -1)
 scale = Vector2(0.98975, 0.98975)
 sprite_frames = SubResource("SpriteFrames_5v66d")
-animation = &"dash"
-frame = 8
-frame_progress = 1.0
+animation = &"idle"
 speed_scale = 2.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1178251357]
+position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_kyqiw")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1000803627]
 position = Vector2(1, 0)
-zoom = Vector2(4, 4)
+zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
-[node name="WallRayLeft" type="RayCast2D" parent="."]
+[node name="WallRayLeft" type="RayCast2D" parent="." unique_id=1368579539]
 scale = Vector2(2.56, 1)
 target_position = Vector2(-10, 0)
 
-[node name="WallRayRight" type="RayCast2D" parent="."]
+[node name="WallRayRight" type="RayCast2D" parent="." unique_id=143992426]
 scale = Vector2(2.639998, 1)
 target_position = Vector2(10, 0)
 
-[node name="SwordArea" type="Area2D" parent="."]
+[node name="SwordArea" type="Area2D" parent="." unique_id=459275596]
 collision_layer = 0
 collision_mask = 4
 monitoring = false
 script = ExtResource("4_yoq75")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SwordArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SwordArea" unique_id=1871822027]
 position = Vector2(42.5, -3)
 shape = SubResource("RectangleShape2D_qidb7")
 
-[node name="Audio_Attack" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Attack" type="AudioStreamPlayer2D" parent="." unique_id=1546553193]
 stream = ExtResource("4_nn08x")
 
-[node name="Audio_Hurt" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Hurt" type="AudioStreamPlayer2D" parent="." unique_id=1249672213]
 stream = ExtResource("5_bhhdu")
 volume_db = -1.168
 pitch_scale = 1.2
 
-[node name="Audio_Jump" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Jump" type="AudioStreamPlayer2D" parent="." unique_id=393204421]
 stream = ExtResource("11_samso")
 volume_db = -6.842
 pitch_scale = 13.68
 
-[node name="Audio_Walk" type="AudioStreamPlayer2D" parent="."]
+[node name="Audio_Walk" type="AudioStreamPlayer2D" parent="." unique_id=236228441]
 stream = ExtResource("12_hl213")
 volume_db = 1.0
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=37111781]
 script = ExtResource("8_bhhdu")
 
-[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("HealthComponent")]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1775340714 node_paths=PackedStringArray("HealthComponent")]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("9_megsn")
 HealthComponent = NodePath("../HealthComponent")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(0.5, -4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1614281357]
+position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_yoq75")
 debug_color = Color(0.34754047, 0.61271185, 0.28365457, 0.41960785)
 
-[node name="SwordAreaDown" type="Area2D" parent="."]
+[node name="SwordAreaDown" type="Area2D" parent="." unique_id=1387289521]
 collision_layer = 0
 collision_mask = 4
 monitoring = false
 script = ExtResource("4_yoq75")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SwordAreaDown"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SwordAreaDown" unique_id=987186208]
 position = Vector2(0, 30)
 shape = SubResource("RectangleShape2D_hacra")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1186039565]
 
-[node name="HealthUI" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("HealthComponent")]
+[node name="HealthUI" type="Control" parent="CanvasLayer" unique_id=1900534075 node_paths=PackedStringArray("HealthComponent")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 10.0
@@ -504,21 +502,21 @@ offset_bottom = 50.0
 script = ExtResource("12_lmeus")
 HealthComponent = NodePath("../../HealthComponent")
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HealthUI"]
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HealthUI" unique_id=433352804]
 layout_mode = 0
 offset_left = -17.0
 offset_top = 11.0
 offset_right = 183.0
 offset_bottom = 41.0
 
-[node name="HealthLabel" type="Label" parent="CanvasLayer/HealthUI"]
+[node name="HealthLabel" type="Label" parent="CanvasLayer/HealthUI" unique_id=1337180506]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 45.0
 offset_right = 50.0
 offset_bottom = 68.0
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=1263316555]
 visible = false
 
-[node name="PauseMenu" parent="CanvasLayer2" instance=ExtResource("13_061yh")]
+[node name="PauseMenu" parent="CanvasLayer2" unique_id=1534044736 instance=ExtResource("13_061yh")]
