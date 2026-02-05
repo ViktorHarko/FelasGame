@@ -302,7 +302,7 @@ public partial class Player : CharacterBody2D
 		{
 			_isWallSliding = true;
 
-			_animatedSprite.FlipH = (wallSide == 1);
+			//_animatedSprite.FlipH = (wallSide == 1);
 
 			velocity.Y = Mathf.Min(velocity.Y, WallSlideMaxFallSpeed);
 			velocity.X = Mathf.MoveToward(velocity.X, 0, WallSlideStickFriction * fDelta);
@@ -490,6 +490,17 @@ public partial class Player : CharacterBody2D
 			ResetAttackState();
 			_animatedSprite.Play("idle");
 		}
+		
+		//wall slide start animation
+		if (_animatedSprite.Animation == "wall_slide_start")
+		{
+			// Якщо ми все ще на стіні, перемикаємось на цикл
+			if (_isWallSliding)
+			{
+				_animatedSprite.Play("wall_slide_loop");
+			}
+		}
+		
 		if (_animatedSprite.Animation == "death")
 		{
 			// Повний рестарт гри (як кнопка Restart)
@@ -513,7 +524,15 @@ public partial class Player : CharacterBody2D
 
 		if (_isWallSliding)
 		{
-			_animatedSprite.Play("wall_slide");
+			// Якщо зараз грає цикл - нічого не чіпаємо, хай грає
+			if (_animatedSprite.Animation == "wall_slide_loop") return;
+
+			// Якщо зараз грає початок - теж не чіпаємо, чекаємо поки закінчиться (щоб спрацював OnAnimationFinished)
+			if (_animatedSprite.Animation == "wall_slide_start") return;
+
+			// Якщо грає щось інше (наприклад, jump або fall), значить ми тільки торкнулися стіни.
+			// Запускаємо початок!
+			_animatedSprite.Play("wall_slide_start");
 			return;
 		}
 		
