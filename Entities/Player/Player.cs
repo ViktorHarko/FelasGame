@@ -9,7 +9,7 @@ public partial class Player : CharacterBody2D
 	
 	[ExportGroup("Stats")]
 	[Export] public float Speed = 250.0f;
-	[Export] public float JumpVelocity = -450.0f;
+	[Export] public float JumpVelocity = -550.0f;
 	[Export] public float Acceleration = 1500.0f;
 	[Export] public float Friction = 1200.0f;
 	[Export] public int MaxJumps = 2;
