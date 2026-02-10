@@ -17,7 +17,12 @@ public partial class Player : CharacterBody2D
 
 	[ExportGroup("Combat")]
 	[Export] public float KnockbackForce = 300.0f;
-	[Export] public float StunDuration = 0.3f;
+	[Export] public float KnockbackUpForce = 160.0f;
+	[Export] public float KnockbackDamping = 2200.0f;
+	[Export] public float StunDuration = 0.18f;
+	[Export] public float HurtInvincibilityDuration = 0.8f;
+	[Export] public float EnemyTopDropDuration = 0.12f;
+	[Export] public float EnemyTopDropPush = 120.0f;
 
 	[Export] public float DownAttackSpeed = 600.0f;
 	[Export] public float DownAttackBounce = -350.0f;
@@ -62,6 +67,7 @@ public partial class Player : CharacterBody2D
 	// Невразливість та мерехтіння
 	private bool _isBlinking = false;
 	private float _blinkTimer = 0.0f;
+	private float _enemyTopDropTimer = 0.0f;
 
 	private float _wallJumpLockTimer = 0.0f;
 
@@ -106,6 +112,8 @@ public partial class Player : CharacterBody2D
 		_hurtbox.HitReceived += TakeHitLogic;
 		_hurtbox.InvincibilityStarted += OnInvincibilityStarted;
 		_hurtbox.InvincibilityEnded += OnInvincibilityEnded;
+		_hurtbox.EnableInvincibility = true;
+		_hurtbox.InvincibilityDuration = HurtInvincibilityDuration;
 		
 		_wallRayLeft = GetNode<RayCast2D>("WallRayLeft");
 		_wallRayRight = GetNode<RayCast2D>("WallRayRight");
@@ -123,30 +131,40 @@ public partial class Player : CharacterBody2D
 
 		_wallJumpLockTimer -= fDelta;
 		_dashCooldownTimer -= fDelta;
+		if (_enemyTopDropTimer > 0f)
+		{
+			_enemyTopDropTimer -= fDelta;
+			if (_enemyTopDropTimer <= 0f)
+				SetCollisionMaskValue(9, true);
+		}
 
 		if (_swordHitbox != null) _swordHitbox.Monitoring = _isAttacking;
 		if (_swordHitboxDown != null) _swordHitboxDown.Monitoring = _isDownAttacking;
 
 		// 1. Катсцена
-		if (_isInCutscene)
-		{
-			if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
-			UpdateAnimation(velocity.X, velocity);
-			Velocity = velocity;
-			MoveAndSlide();
-			return;
-		}
+			if (_isInCutscene)
+			{
+				if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+				UpdateAnimation(velocity.X, velocity);
+				Velocity = velocity;
+				MoveAndSlideWithContactDamage();
+				return;
+			}
 
-		// 2. Оглушення (Stun)
-		if (_stunTimer > 0)
-		{
-			_stunTimer -= fDelta;
-			velocity.Y += Gravity * fDelta;
-			velocity.X = Mathf.MoveToward(velocity.X, 0, Friction * fDelta);
-			Velocity = velocity;
-			MoveAndSlide();
-			return;
-		}
+			// 2. Оглушення (Stun)
+			if (_stunTimer > 0)
+			{
+				_isStunned = true;
+				_stunTimer -= fDelta;
+				velocity.Y += Gravity * fDelta;
+				velocity.X = Mathf.MoveToward(velocity.X, 0, KnockbackDamping * fDelta);
+				Velocity = velocity;
+				MoveAndSlideWithContactDamage();
+				if (_stunTimer <= 0f)
+					_isStunned = false;
+				return;
+			}
+			_isStunned = false;
 
 		if ((_isAttacking && _animatedSprite.Animation != "attack") ||
 			(_isDownAttacking && _animatedSprite.Animation != "down"))
@@ -161,10 +179,10 @@ public partial class Player : CharacterBody2D
 			_animatedSprite.Play("dash");
 			_dashTimer -= fDelta;
 
-			velocity.Y = 0;
+				velocity.Y = 0;
 
-			Velocity = velocity;
-			MoveAndSlide();
+				Velocity = velocity;
+				MoveAndSlideWithContactDamage();
 
 			if (_dashTimer <= 0)
 			{
@@ -181,21 +199,21 @@ public partial class Player : CharacterBody2D
 
 		// 3. Атака
 		if (_isAttacking)
-		{
-			if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
-			Velocity = velocity;
-			MoveAndSlide();
-			return;
-		}
+			{
+				if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+				velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
+				Velocity = velocity;
+				MoveAndSlideWithContactDamage();
+				return;
+			}
 
 		if (_isDownAttacking)
 		{
 			velocity.Y = DownAttackSpeed;
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * 0.5f * fDelta);
+				velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * 0.5f * fDelta);
 
-			Velocity = velocity;
-			MoveAndSlide();
+				Velocity = velocity;
+				MoveAndSlideWithContactDamage();
 
 			if (IsOnFloor() || Velocity.Y < DownAttackSpeed * 0.5f)
 			{
@@ -325,14 +343,14 @@ public partial class Player : CharacterBody2D
 
 		if (Input.IsActionJustPressed("dash"))
 		{
-			if (TryStartDash(direction, ref velocity))
-			{
-				_audioJump.Play();
-				Velocity = velocity;
-				MoveAndSlide();
-				return;
+				if (TryStartDash(direction, ref velocity))
+				{
+					_audioJump.Play();
+					Velocity = velocity;
+					MoveAndSlideWithContactDamage();
+					return;
+				}
 			}
-		}
 
 		// Аудіо ходьби
 		if (IsOnFloor() && Mathf.Abs(velocity.X) > 10)
@@ -341,10 +359,47 @@ public partial class Player : CharacterBody2D
 		}
 		else _audioWalk.Stop();
 
-		UpdateAnimation(direction, velocity);
-		Velocity = velocity;
-		MoveAndSlide();
-	}
+			UpdateAnimation(direction, velocity);
+			Velocity = velocity;
+			MoveAndSlideWithContactDamage();
+		}
+
+		private void MoveAndSlideWithContactDamage()
+		{
+			MoveAndSlide();
+			TryApplyBossContactDamageFromSlide();
+		}
+
+		private void TryApplyBossContactDamageFromSlide()
+		{
+			if (_isDead || _hurtbox == null) return;
+			bool canTakeHit = !(_hurtbox.EnableInvincibility && _hurtbox.IsInvincible());
+
+			int slideCount = GetSlideCollisionCount();
+			for (int i = 0; i < slideCount; i++)
+			{
+				KinematicCollision2D collision = GetSlideCollision(i);
+				if (collision == null) continue;
+				if (collision.GetCollider() is not BossController boss) continue;
+				if (boss.IsDead || !boss.DealsContactDamage) continue;
+
+				if (collision.GetNormal().Y < -0.7f)
+					StartEnemyTopDrop();
+
+				int damage = Mathf.Max(0, boss.ContactDamage);
+				if (!canTakeHit || damage <= 0) continue;
+
+				_hurtbox.TakeHit(damage, boss.GlobalPosition);
+				return;
+			}
+		}
+
+		private void StartEnemyTopDrop()
+		{
+			_enemyTopDropTimer = Mathf.Max(_enemyTopDropTimer, EnemyTopDropDuration);
+			SetCollisionMaskValue(9, false);
+			Velocity = new Vector2(Velocity.X, Mathf.Max(Velocity.Y, EnemyTopDropPush));
+		}
 
 	public override void _Process(double delta)
 	{
@@ -353,15 +408,7 @@ public partial class Player : CharacterBody2D
 			_blinkTimer -= (float)delta;
 			if (_blinkTimer <= 0)
 			{
-				// Перемикаємо між червоним напівпрозорим і нормальним
-				if (_animatedSprite.Modulate.A < 1.0f)
-				{
-					_animatedSprite.Modulate = Colors.White; // Повністю видимий
-				}
-				else
-				{
-					_animatedSprite.Modulate = new Color(1, 0, 0, 0.5f); // Червоний напівпрозорий
-				}
+				_animatedSprite.Visible = !_animatedSprite.Visible;
 				_blinkTimer = BlinkInterval;
 			}
 		}
@@ -378,10 +425,15 @@ public partial class Player : CharacterBody2D
 
 		// Логіка відкидання
 		_stunTimer = StunDuration;
+		_isStunned = true;
 		ResetAttackState();
+		_isDashing = false;
 
-		Vector2 knockbackDir = (GlobalPosition - sourcePos).Normalized();
-		Velocity = new Vector2(knockbackDir.X * KnockbackForce, -200);
+		float dir = Mathf.Sign(GlobalPosition.X - sourcePos.X);
+		if (Mathf.IsZeroApprox(dir))
+			dir = _animatedSprite.FlipH ? 1f : -1f;
+
+		Velocity = new Vector2(dir * KnockbackForce, -KnockbackUpForce);
 	}
 
 	// Методи для обробки невразливості
@@ -389,12 +441,14 @@ public partial class Player : CharacterBody2D
 	{
 		_isBlinking = true;
 		_blinkTimer = BlinkInterval;
+		_animatedSprite.Visible = true;
 	}
 
 	private void OnInvincibilityEnded()
 	{
 		_isBlinking = false;
-		_animatedSprite.Modulate = Colors.White; // Відновлюємо нормальний колір
+		_animatedSprite.Visible = true;
+		_animatedSprite.Modulate = Colors.White;
 	}
 
 	// Цей метод викликається автоматично через Сигнал від HealthComponent
@@ -406,6 +460,9 @@ public partial class Player : CharacterBody2D
 
 		// Зупиняємо блимання і відновлюємо нормальний колір
 		_isBlinking = false;
+		_isStunned = false;
+		_stunTimer = 0f;
+		_animatedSprite.Visible = true;
 		_animatedSprite.Modulate = Colors.White;
 
 		ResetAttackState();

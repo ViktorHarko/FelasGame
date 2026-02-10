@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://cflc5dt0v5qin"]
+[gd_scene format=3 uid="uid://cflc5dt0v5qin"]
 
 [ext_resource type="Texture2D" uid="uid://bgchwbue30mxb" path="res://test_assets/character/hand attack.png" id="2_5m37j"]
 [ext_resource type="Texture2D" uid="uid://dfbb0vof4a7ks" path="res://test_assets/Boy_Adventure A1.png" id="2_gntrk"]
@@ -441,6 +441,7 @@ size = Vector2(40, 25)
 
 [node name="Player" type="CharacterBody2D" unique_id=1290798182 node_paths=PackedStringArray("HealthComp") groups=["Player"]]
 collision_layer = 2
+collision_mask = 257
 script = ExtResource("2_kyqiw")
 HealthComp = NodePath("HealthComponent")
 Speed = 150.0
@@ -454,13 +455,13 @@ sprite_frames = SubResource("SpriteFrames_5v66d")
 animation = &"wall_slide_start"
 speed_scale = 2.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1183874181]
 position = Vector2(1, -4)
 shape = SubResource("RectangleShape2D_kyqiw")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1000803627]
-position = Vector2(1, 0)
-zoom = Vector2(2, 2)
+position = Vector2(2, 0)
+zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
@@ -501,6 +502,7 @@ volume_db = 1.0
 
 [node name="HealthComponent" type="Node" parent="." unique_id=37111781]
 script = ExtResource("8_bhhdu")
+MaxHealth = 10
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1775340714 node_paths=PackedStringArray("HealthComponent")]
 collision_layer = 2
