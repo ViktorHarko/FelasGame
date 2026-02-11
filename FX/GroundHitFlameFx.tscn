@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://cvlyyq8xj1e0v"]
+
+[ext_resource type="Texture2D" uid="uid://c44cjw32471hg" path="res://test_assets/Boss/FFX_nyknck.png" id="1_ho58u"]
+[ext_resource type="Script" uid="uid://c5uv23xev1o4f" path="res://FX/GroundHitFlameFx.cs" id="1_ip0lu"]
+[ext_resource type="Script" uid="uid://chbkqgvtx86y3" path="res://Scripts/Components/Hitbox.cs" id="2_hitbox"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ip0lu"]
+atlas = ExtResource("1_ho58u")
+region = Rect2(48, 32, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b4waj"]
+atlas = ExtResource("1_ho58u")
+region = Rect2(0, 32, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qmem1"]
+atlas = ExtResource("1_ho58u")
+region = Rect2(48, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nuubx"]
+atlas = ExtResource("1_ho58u")
+region = Rect2(0, 0, 48, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y0di1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ip0lu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b4waj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qmem1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nuubx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_damage"]
+size = Vector2(26, 18)
+
+[node name="GroundHitFlameFx" type="Node2D" unique_id=427112833 node_paths=PackedStringArray("Anim", "DamageHitbox")]
+script = ExtResource("1_ip0lu")
+Anim = NodePath("AnimatedSprite2D")
+PreferredAnimation = "default"
+DamageHitbox = NodePath("DamageHitbox")
+Damage = 1
+DamageActiveTime = 0.3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=15651809]
+sprite_frames = SubResource("SpriteFrames_y0di1")
+frame = 1
+frame_progress = 0.105457485
+
+[node name="DamageHitbox" type="Area2D" parent="." unique_id=1392048117]
+position = Vector2(0, -9)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_hitbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageHitbox" unique_id=545037920]
+shape = SubResource("RectangleShape2D_damage")

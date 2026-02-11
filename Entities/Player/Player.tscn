@@ -441,6 +441,7 @@ size = Vector2(40, 25)
 
 [node name="Player" type="CharacterBody2D" unique_id=137404135 node_paths=PackedStringArray("HealthComp") groups=["Player"]]
 collision_layer = 2
+collision_mask = 257
 script = ExtResource("2_kyqiw")
 HealthComp = NodePath("HealthComponent")
 Speed = 150.0
@@ -500,6 +501,7 @@ volume_db = 1.0
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1271533320]
 script = ExtResource("8_bhhdu")
+MaxHealth = 10
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=396675682 node_paths=PackedStringArray("HealthComponent")]
 collision_layer = 2

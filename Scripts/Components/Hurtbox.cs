@@ -43,6 +43,9 @@ public partial class Hurtbox : Area2D
 			HealthComponent.Damage(damage);
 		}
 
+		GD.Print($"[HURTBOX] TakeHit dmg={damage} healthIsNull={HealthComponent == null}");
+
+
 		// 2. Кричимо "Мене вдарили!", щоб Enemy.cs це почув і увімкнув анімацію
 		EmitSignal(SignalName.HitReceived, damage, sourcePosition);
 
