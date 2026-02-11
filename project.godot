@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Felas"
-run/main_scene="uid://lweejdwcj517"
+run/main_scene="uid://d4cpcr7l6nwkv"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 config/icon="res://icon.svg"
 
@@ -23,6 +23,12 @@ config/icon="res://icon.svg"
 
 SceneManager="*res://Scenes/SceneManager.tscn"
 GameManager="*res://Scripts/Managers/GameManager.cs"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
 
 [dotnet]
 

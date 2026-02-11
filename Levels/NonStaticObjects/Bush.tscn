@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://ou4ekq3yhp3v"]
+
+[ext_resource type="Script" uid="uid://bjrra1626uova" path="res://Levels/NonStaticObjects/Grass.cs" id="1_6wc6f"]
+[ext_resource type="Shader" uid="uid://dtja5fiiyvx0g" path="res://Levels/NonStaticObjects/Grass.gdshader" id="1_vqg8p"]
+[ext_resource type="Texture2D" uid="uid://k7qvq8sk40n5" path="res://test_assets/forest/bushes/bush-green.png" id="2_vqg8p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dl4qc"]
+resource_local_to_scene = true
+shader = ExtResource("1_vqg8p")
+shader_parameter/bend = 0.05900005030250011
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jjx8f"]
+shader = ExtResource("1_vqg8p")
+shader_parameter/bend = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lefhu"]
+size = Vector2(57.5, 34.5)
+
+[node name="Grass" type="Area2D" unique_id=543564591 node_paths=PackedStringArray("Sprite")]
+light_mask = 3
+visibility_layer = 3
+material = SubResource("ShaderMaterial_dl4qc")
+position = Vector2(0, 10)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_6wc6f")
+Sprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1969596036]
+material = SubResource("ShaderMaterial_jjx8f")
+position = Vector2(0, -35)
+texture = ExtResource("2_vqg8p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=639592642]
+light_mask = 3
+visibility_layer = 3
+position = Vector2(-0.75, -22.75)
+shape = SubResource("RectangleShape2D_lefhu")
