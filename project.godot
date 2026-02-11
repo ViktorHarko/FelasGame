@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Felas"
-run/main_scene="uid://lweejdwcj517"
+run/main_scene="uid://d4cpcr7l6nwkv"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 config/icon="res://icon.svg"
 
