@@ -8,12 +8,13 @@ public partial class Player : CharacterBody2D
 	[Export] public HealthComponent HealthComp; // Посилання на компонент здоров'я
 	
 	[ExportGroup("Stats")]
-	[Export] public float Speed = 250.0f;
+	[Export] public float Speed = 250.0f;      // Швидкість ходьби
+	[Export] public float RunSpeed = 450.0f;   // Швидкість бігу (після ривка)
 	[Export] public float JumpVelocity = -550.0f;
 	[Export] public float Acceleration = 1500.0f;
 	[Export] public float Friction = 1200.0f;
 	[Export] public int MaxJumps = 2;
-	[Export] public float JumpCutoff = 0.6f; // Коефіцієнт зрізу (0.5 - 0.6 це гарний баланс)
+	[Export] public float JumpCutoff = 0.6f; 
 
 	[ExportGroup("Combat")]
 	[Export] public float KnockbackForce = 300.0f;
@@ -28,10 +29,11 @@ public partial class Player : CharacterBody2D
 	[Export] public float DownAttackBounce = -350.0f;
 
 	[ExportGroup("Invincibility Visual")]
-	[Export] public float BlinkInterval = 0.1f; // Швидкість блимання
+	[Export] public float BlinkInterval = 0.1f; 
 
 	// Шлях до початкової сцени гри
 	[Export] private string gameStartPath = "res://Levels/Room1/Room1.tscn";
+	
 	[ExportGroup("Dash")]
 	[Export] public float DashSpeed = 650f;
 	[Export] public float DashDuration = 0.12f;
@@ -73,7 +75,7 @@ public partial class Player : CharacterBody2D
 
 	// Вузли
 	private AnimatedSprite2D _animatedSprite;
-	private Area2D _swordHitbox; // Це тепер Hitbox (Area2D)
+	private Area2D _swordHitbox; 
 	private Area2D _swordHitboxDown;
 	private Hurtbox _hurtbox;
 
@@ -91,7 +93,7 @@ public partial class Player : CharacterBody2D
 	public override void _Ready()
 	{
 		_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		_swordHitbox = GetNode<Area2D>("SwordArea"); // Переконайся, що на ньому висить скрипт Hitbox.cs
+		_swordHitbox = GetNode<Area2D>("SwordArea"); 
 		_swordHitboxDown = GetNode<Area2D>("SwordAreaDown");
 		_swordHitboxDown.AreaEntered += OnDownAttackHit;
 		
@@ -103,11 +105,10 @@ public partial class Player : CharacterBody2D
 
 		_animatedSprite.AnimationFinished += OnAnimationFinished;
 
-		// --- ПІДПИСКА НА СИГНАЛИ КОМПОНЕНТІВ ---
-		// Ми кажемо: "Коли HealthComponent кричить Died, запусти мій метод OnDeath"
-		HealthComp.Died += OnDeath;
+		// Підписка на сигнали
+		if (HealthComp != null)
+			HealthComp.Died += OnDeath;
 
-		// Отримуємо Hurtbox і підписуємось на сигнали невразливості
 		_hurtbox = GetNode<Hurtbox>("Hurtbox");
 		_hurtbox.HitReceived += TakeHitLogic;
 		_hurtbox.InvincibilityStarted += OnInvincibilityStarted;
@@ -131,6 +132,7 @@ public partial class Player : CharacterBody2D
 
 		_wallJumpLockTimer -= fDelta;
 		_dashCooldownTimer -= fDelta;
+		
 		if (_enemyTopDropTimer > 0f)
 		{
 			_enemyTopDropTimer -= fDelta;
@@ -142,30 +144,31 @@ public partial class Player : CharacterBody2D
 		if (_swordHitboxDown != null) _swordHitboxDown.Monitoring = _isDownAttacking;
 
 		// 1. Катсцена
-			if (_isInCutscene)
-			{
-				if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
-				UpdateAnimation(velocity.X, velocity);
-				Velocity = velocity;
-				MoveAndSlideWithContactDamage();
-				return;
-			}
+		if (_isInCutscene)
+		{
+			if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+			UpdateAnimation(velocity.X, velocity);
+			Velocity = velocity;
+			MoveAndSlideWithContactDamage();
+			return;
+		}
 
-			// 2. Оглушення (Stun)
-			if (_stunTimer > 0)
-			{
-				_isStunned = true;
-				_stunTimer -= fDelta;
-				velocity.Y += Gravity * fDelta;
-				velocity.X = Mathf.MoveToward(velocity.X, 0, KnockbackDamping * fDelta);
-				Velocity = velocity;
-				MoveAndSlideWithContactDamage();
-				if (_stunTimer <= 0f)
-					_isStunned = false;
-				return;
-			}
-			_isStunned = false;
+		// 2. Оглушення (Stun)
+		if (_stunTimer > 0)
+		{
+			_isStunned = true;
+			_stunTimer -= fDelta;
+			velocity.Y += Gravity * fDelta;
+			velocity.X = Mathf.MoveToward(velocity.X, 0, KnockbackDamping * fDelta);
+			Velocity = velocity;
+			MoveAndSlideWithContactDamage();
+			if (_stunTimer <= 0f)
+				_isStunned = false;
+			return;
+		}
+		_isStunned = false;
 
+		// Скидання атаки
 		if ((_isAttacking && _animatedSprite.Animation != "attack") ||
 			(_isDownAttacking && _animatedSprite.Animation != "down"))
 		{
@@ -176,55 +179,47 @@ public partial class Player : CharacterBody2D
 		if (_isDashing)
 		{
 			if (_animatedSprite.Animation != "dash")
-			_animatedSprite.Play("dash");
+				_animatedSprite.Play("dash");
+				
 			_dashTimer -= fDelta;
-
-				velocity.Y = 0;
-
-				Velocity = velocity;
-				MoveAndSlideWithContactDamage();
+			velocity.Y = 0;
+			Velocity = velocity;
+			MoveAndSlideWithContactDamage();
 
 			if (_dashTimer <= 0)
 			{
 				_isDashing = false;
 				_dashCooldownTimer = DashCooldown;
-
-				if (IsOnFloor())
-					_animatedSprite.Play(Mathf.Abs(Velocity.X) > 10 ? "run" : "idle");
-				else
-					_animatedSprite.Play("jump");
+				// Тут не перемикаємо анімацію вручну, UpdateAnimation зробить це в наступному кадрі
 			}
 			return;
 		}
 
 		// 3. Атака
 		if (_isAttacking)
-			{
-				if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
-				velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
-				Velocity = velocity;
-				MoveAndSlideWithContactDamage();
-				return;
-			}
+		{
+			if (!IsOnFloor()) velocity.Y += Gravity * fDelta;
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * fDelta);
+			Velocity = velocity;
+			MoveAndSlideWithContactDamage();
+			return;
+		}
 
 		if (_isDownAttacking)
 		{
 			velocity.Y = DownAttackSpeed;
-				velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * 0.5f * fDelta);
-
-				Velocity = velocity;
-				MoveAndSlideWithContactDamage();
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Friction * 0.5f * fDelta);
+			Velocity = velocity;
+			MoveAndSlideWithContactDamage();
 
 			if (IsOnFloor() || Velocity.Y < DownAttackSpeed * 0.5f)
 			{
 				EndDownAttack();
 			}
-
 			return;
 		}
 
-
-		// 4. Рух
+		// 4. Рух і Стрибки
 		_isWallSliding = false;
 
 		float direction = Input.GetAxis("ui_left", "ui_right");
@@ -239,118 +234,92 @@ public partial class Player : CharacterBody2D
 			_dashAvailableInAir = true;
 		}
 
-		// jump scale
-		_isWallSliding = false;
-
-		//float direction = Input.GetAxis("ui_left", "ui_right");
-
-		if (!IsOnFloor())
-		{
-			velocity.Y += Gravity * fDelta;
-		}
-		
 		if (Input.IsActionJustReleased("ui_accept") && velocity.Y < 0)
 		{
-			// Ми "зрізаємо" вертикальну швидкість, множачи її на коефіцієнт (напр. 0.6)
-			// Це змушує гравітацію зупинити персонажа набагато раніше.
 			velocity.Y *= JumpCutoff; 
 		}
 
-
-
 		int wallSide = GetWallSide();
 
-		bool touchingWall =
-			!IsOnFloor() &&
-			wallSide != 0 &&
-			_wallJumpLockTimer <= 0f;
-
-		bool pressingAway =
-			(wallSide == -1 && direction > 0) ||
-			(wallSide ==  1 && direction < 0);
-
-		bool canWallSlide =
-			touchingWall &&
-			velocity.Y > 0 &&
-			!pressingAway;
-
+		bool touchingWall = !IsOnFloor() && wallSide != 0 && _wallJumpLockTimer <= 0f;
+		bool pressingAway = (wallSide == -1 && direction > 0) || (wallSide == 1 && direction < 0);
+		bool canWallSlide = touchingWall && velocity.Y > 0 && !pressingAway;
 		bool didWallJump = false;
 
+		// Стрибок
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
 			if (touchingWall && velocity.Y > 0)
 			{
 				int pushDir = -wallSide;
-
 				velocity.Y = WallJumpVertical;
 				velocity.X = pushDir * WallJumpHorizontal;
 
 				_wallJumpLockTimer = WallJumpLockTime;
 				_isWallSliding = false;
-
 				_jumpCount = 1;
 				_dashAvailableInAir = true;
-
 				_animatedSprite.FlipH = pushDir < 0;
-
 				_audioJump.PitchScale = (float)GD.RandRange(0.9, 1.1);
 				_audioJump.Play();
-
 				didWallJump = true;
 			}
 			else if (IsOnFloor() || _jumpCount < MaxJumps)
 			{
 				velocity.Y = JumpVelocity;
 				_jumpCount++;
-
 				_audioJump.PitchScale = (float)GD.RandRange(0.9, 1.1);
 				_audioJump.Play();
 			}
 		}
 
+		// --- ЛОГІКА РУХУ (SILKSONG STYLE) ---
 		if (!didWallJump)
 		{
+			// За замовчуванням швидкість - звичайна ходьба
+			float currentMoveSpeed = Speed;
+
+			// Якщо кнопка Dash затиснута, ми біжимо швидко.
+			if (Input.IsActionPressed("dash"))
+			{
+				currentMoveSpeed = RunSpeed;
+			}
+
 			if (direction != 0)
-				velocity.X = Mathf.MoveToward(velocity.X, direction * Speed, Acceleration * fDelta);
+			{
+				velocity.X = Mathf.MoveToward(velocity.X, direction * currentMoveSpeed, Acceleration * fDelta);
+			}
 			else
+			{
 				velocity.X = Mathf.MoveToward(velocity.X, 0, Friction * fDelta);
+			}
 		}
 
 		if (canWallSlide)
 		{
 			_isWallSliding = true;
-
-			//_animatedSprite.FlipH = (wallSide == 1);
-
 			velocity.Y = Mathf.Min(velocity.Y, WallSlideMaxFallSpeed);
 			velocity.X = Mathf.MoveToward(velocity.X, 0, WallSlideStickFriction * fDelta);
 		}
-		
-
-
 
 		if (Input.IsActionJustPressed("attack"))
 		{
 			if (!IsOnFloor() && Input.IsActionPressed("ui_down"))
-			{
 				StartDownAttack();
-			}
 			else
-			{
 				StartAttack();
-			}
 		}
 
 		if (Input.IsActionJustPressed("dash"))
 		{
-				if (TryStartDash(direction, ref velocity))
-				{
-					_audioJump.Play();
-					Velocity = velocity;
-					MoveAndSlideWithContactDamage();
-					return;
-				}
+			if (TryStartDash(direction, ref velocity))
+			{
+				_audioJump.Play();
+				Velocity = velocity;
+				MoveAndSlideWithContactDamage();
+				return;
 			}
+		}
 
 		// Аудіо ходьби
 		if (IsOnFloor() && Mathf.Abs(velocity.X) > 10)
@@ -359,47 +328,10 @@ public partial class Player : CharacterBody2D
 		}
 		else _audioWalk.Stop();
 
-			UpdateAnimation(direction, velocity);
-			Velocity = velocity;
-			MoveAndSlideWithContactDamage();
-		}
-
-		private void MoveAndSlideWithContactDamage()
-		{
-			MoveAndSlide();
-			TryApplyBossContactDamageFromSlide();
-		}
-
-		private void TryApplyBossContactDamageFromSlide()
-		{
-			if (_isDead || _hurtbox == null) return;
-			bool canTakeHit = !(_hurtbox.EnableInvincibility && _hurtbox.IsInvincible());
-
-			int slideCount = GetSlideCollisionCount();
-			for (int i = 0; i < slideCount; i++)
-			{
-				KinematicCollision2D collision = GetSlideCollision(i);
-				if (collision == null) continue;
-				if (collision.GetCollider() is not BossController boss) continue;
-				if (boss.IsDead || !boss.DealsContactDamage) continue;
-
-				if (collision.GetNormal().Y < -0.7f)
-					StartEnemyTopDrop();
-
-				int damage = Mathf.Max(0, boss.ContactDamage);
-				if (!canTakeHit || damage <= 0) continue;
-
-				_hurtbox.TakeHit(damage, boss.GlobalPosition);
-				return;
-			}
-		}
-
-		private void StartEnemyTopDrop()
-		{
-			_enemyTopDropTimer = Mathf.Max(_enemyTopDropTimer, EnemyTopDropDuration);
-			SetCollisionMaskValue(9, false);
-			Velocity = new Vector2(Velocity.X, Mathf.Max(Velocity.Y, EnemyTopDropPush));
-		}
+		UpdateAnimation(direction, velocity);
+		Velocity = velocity;
+		MoveAndSlideWithContactDamage();
+	}
 
 	public override void _Process(double delta)
 	{
@@ -414,16 +346,50 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	// Цей метод викликає Hurtbox, коли хтось нас вдарив
-	// Зверни увагу: нам більше не треба рахувати HP тут!
+	// --- МЕТОДИ ЛОГІКИ ---
+
+	private void MoveAndSlideWithContactDamage()
+	{
+		MoveAndSlide();
+		TryApplyBossContactDamageFromSlide();
+	}
+
+	private void TryApplyBossContactDamageFromSlide()
+	{
+		if (_isDead || _hurtbox == null) return;
+		bool canTakeHit = !(_hurtbox.EnableInvincibility && _hurtbox.IsInvincible());
+
+		int slideCount = GetSlideCollisionCount();
+		for (int i = 0; i < slideCount; i++)
+		{
+			KinematicCollision2D collision = GetSlideCollision(i);
+			if (collision == null) continue;
+			if (collision.GetCollider() is not BossController boss) continue;
+			if (boss.IsDead || !boss.DealsContactDamage) continue;
+
+			if (collision.GetNormal().Y < -0.7f)
+				StartEnemyTopDrop();
+
+			int damage = Mathf.Max(0, boss.ContactDamage);
+			if (!canTakeHit || damage <= 0) continue;
+
+			_hurtbox.TakeHit(damage, boss.GlobalPosition);
+			return;
+		}
+	}
+
+	private void StartEnemyTopDrop()
+	{
+		_enemyTopDropTimer = Mathf.Max(_enemyTopDropTimer, EnemyTopDropDuration);
+		SetCollisionMaskValue(9, false);
+		Velocity = new Vector2(Velocity.X, Mathf.Max(Velocity.Y, EnemyTopDropPush));
+	}
+
 	public void TakeHitLogic(int damage, Vector2 sourcePos)
 	{
 		if (_isDead) return;
 
-		// Звук (тільки якщо урон реально пройшов)
 		_audioHurt.Play();
-
-		// Логіка відкидання
 		_stunTimer = StunDuration;
 		_isStunned = true;
 		ResetAttackState();
@@ -436,7 +402,6 @@ public partial class Player : CharacterBody2D
 		Velocity = new Vector2(dir * KnockbackForce, -KnockbackUpForce);
 	}
 
-	// Методи для обробки невразливості
 	private void OnInvincibilityStarted()
 	{
 		_isBlinking = true;
@@ -451,20 +416,15 @@ public partial class Player : CharacterBody2D
 		_animatedSprite.Modulate = Colors.White;
 	}
 
-	// Цей метод викликається автоматично через Сигнал від HealthComponent
 	private void OnDeath()
 	{
 		if (_isDead) return;
-
 		_isDead = true;
-
-		// Зупиняємо блимання і відновлюємо нормальний колір
 		_isBlinking = false;
 		_isStunned = false;
 		_stunTimer = 0f;
 		_animatedSprite.Visible = true;
 		_animatedSprite.Modulate = Colors.White;
-
 		ResetAttackState();
 		_animatedSprite.Play("death");
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
@@ -476,7 +436,6 @@ public partial class Player : CharacterBody2D
 		_animatedSprite.Play("attack");
 		_audioAttack.PitchScale = (float)GD.RandRange(0.9, 1.2);
 		_audioAttack.Play();
-		// Area2D (Hitbox) сам зробить свою справу, коли торкнеться ворога
 		_swordHitbox.Monitoring = true;
 	}
 
@@ -486,12 +445,8 @@ public partial class Player : CharacterBody2D
 		_animatedSprite.Play("down");
 		_audioAttack.PitchScale = (float)GD.RandRange(0.8, 1.0);
 		_audioAttack.Play();
-
-		// Вимикаємо звичайний хітбокс, вмикаємо нижній
 		_swordHitbox.Monitoring = false;
 		_swordHitboxDown.Monitoring = true;
-
-		// Скидаємо вертикальну швидкість для початку пікірування
 		Velocity = new Vector2(Velocity.X, 0);
 	}
 
@@ -501,45 +456,38 @@ public partial class Player : CharacterBody2D
 		_animatedSprite.Play("idle");
 	}
 
-	// Викликається при влучанні атаки вниз у щось
 	private void OnDownAttackHit(Area2D area)
 	{
-		// Перевіряємо, що це Hurtbox (ворог)
 		if (area is Hurtbox)
 		{
-			// Відскакуємо вгору!
 			Velocity = new Vector2(Velocity.X, DownAttackBounce);
-
-			// Завершуємо атаку вниз
 			EndDownAttack();
-
-			// Скидаємо лічильник стрибків, щоб можна було стрибати знову
 			_jumpCount = 1;
 			_dashAvailableInAir = true;
 		}
 	}
 
-
-	// --- Методи для катсцен ---
 	public void ToggleCutscene(bool active)
 	{
 		ResetAttackState();
 		_isInCutscene = active;
-
 		if (active)
-		{ 
-			Velocity = Vector2.Zero; 
-			_audioWalk.Stop(); 
+		{
+			Velocity = Vector2.Zero;
+			_audioWalk.Stop();
 		}
 	}
 
 	public void ForceWalk(float directionSign)
 	{
 		Velocity = new Vector2(directionSign * Speed, Velocity.Y);
-		if (directionSign != 0) { _animatedSprite.FlipH = directionSign < 0; _animatedSprite.Play("run"); }
+		if (directionSign != 0) 
+		{ 
+			_animatedSprite.FlipH = directionSign < 0; 
+			_animatedSprite.Play("run"); 
+		}
 	}
 
-	// Анімації та OnAnimationFinished залишаються такими ж...
 	private void OnAnimationFinished()
 	{
 		if (_animatedSprite.Animation == "attack")
@@ -548,10 +496,8 @@ public partial class Player : CharacterBody2D
 			_animatedSprite.Play("idle");
 		}
 		
-		//wall slide start animation
 		if (_animatedSprite.Animation == "wall_slide_start")
 		{
-			// Якщо ми все ще на стіні, перемикаємось на цикл
 			if (_isWallSliding)
 			{
 				_animatedSprite.Play("wall_slide_loop");
@@ -560,11 +506,9 @@ public partial class Player : CharacterBody2D
 		
 		if (_animatedSprite.Animation == "death")
 		{
-			// Повний рестарт гри (як кнопка Restart)
 			if (GameManager.Instance != null)
 			{
 				GameManager.Instance.ResetGame();
-				// Завантажуємо збережену сцену (або стартову якщо немає збереження)
 				string respawnScene = GameManager.Instance.GetRespawnScenePath();
 				GetTree().ChangeSceneToFile(respawnScene);
 			}
@@ -575,20 +519,15 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
+	// --- ОНОВЛЕНИЙ МЕТОД UPDATE ANIMATION (З ПАДІННЯМ) ---
 	private void UpdateAnimation(float direction, Vector2 velocity)
 	{
 		if (_isAttacking || _isDownAttacking || _isDashing || _isDead || _isStunned) return;
 
 		if (_isWallSliding)
 		{
-			// Якщо зараз грає цикл - нічого не чіпаємо, хай грає
 			if (_animatedSprite.Animation == "wall_slide_loop") return;
-
-			// Якщо зараз грає початок - теж не чіпаємо, чекаємо поки закінчиться (щоб спрацював OnAnimationFinished)
 			if (_animatedSprite.Animation == "wall_slide_start") return;
-
-			// Якщо грає щось інше (наприклад, jump або fall), значить ми тільки торкнулися стіни.
-			// Запускаємо початок!
 			_animatedSprite.Play("wall_slide_start");
 			return;
 		}
@@ -599,7 +538,6 @@ public partial class Player : CharacterBody2D
 			_swordHitbox.Scale = new Vector2(1, 1); 
 			_swordHitboxDown.Scale = new Vector2(1, 1); 
 		}
-
 		else if (direction < 0) 
 		{ 
 			_animatedSprite.FlipH = true; 
@@ -607,8 +545,37 @@ public partial class Player : CharacterBody2D
 			_swordHitboxDown.Scale = new Vector2(-1, 1); 
 		}
 
-		if (IsOnFloor()) { if (Mathf.IsZeroApprox(velocity.X)) _animatedSprite.Play("idle"); else _animatedSprite.Play("run"); }
-		else { if (velocity.Y < 0) _animatedSprite.Play("jump"); }
+		if (IsOnFloor()) 
+		{ 
+			if (Mathf.IsZeroApprox(velocity.X)) 
+			{
+				_animatedSprite.Play("idle"); 
+			}
+			else 
+			{
+				// Логіка перемикання бігу/ходьби
+				if (Mathf.Abs(velocity.X) > Speed + 10.0f)
+				{
+					_animatedSprite.Play("run"); 
+				}
+				else
+				{
+					_animatedSprite.Play("walk"); 
+				}
+			}
+		}
+		else 
+		{ 
+			// ЛОГІКА СТРИБКА І ПАДІННЯ
+			if (velocity.Y < 0) 
+			{
+				_animatedSprite.Play("jump"); // Рух вгору
+			}
+			else if (velocity.Y > 0)
+			{
+				_animatedSprite.Play("fall"); // Рух вниз
+			}
+		}
 	}
 
 	private void ResetAttackState()
@@ -665,21 +632,18 @@ public partial class Player : CharacterBody2D
 			if (keyEvent.Keycode == Key.Escape && PauseMenu != null)
 			{
 				PauseMenu.TogglePause(!PauseMenu.Visible);
-
-				// Зупиняємо звук ходьби під час паузи
 				if (PauseMenu.Visible)
 					_audioWalk.Stop();
 			}
 		}
 	}
+	
 	private void TogglePauseMenu()
 	{
 		if (PauseMenu == null) return;
-
 		PauseMenu.Visible = !PauseMenu.Visible;
 		GetTree().Paused = PauseMenu.Visible;
 
-		// При паузі зупиняємо аудіо ходьби
 		if (PauseMenu.Visible)
 		{
 			_audioWalk.Stop();
