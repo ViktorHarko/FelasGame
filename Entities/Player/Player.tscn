@@ -1,20 +1,22 @@
 [gd_scene format=3 uid="uid://cflc5dt0v5qin"]
 
-[ext_resource type="Texture2D" uid="uid://bgchwbue30mxb" path="res://test_assets/character/hand attack.png" id="2_5m37j"]
-[ext_resource type="Texture2D" uid="uid://dfbb0vof4a7ks" path="res://test_assets/Boy_Adventure A1.png" id="2_gntrk"]
+[ext_resource type="Texture2D" uid="uid://cshwv2fjquvfk" path="res://test_assets/character/hand attack.png" id="2_5m37j"]
+[ext_resource type="Texture2D" uid="uid://8cnk0cvp7is6" path="res://test_assets/Boy_Adventure A1.png" id="2_gntrk"]
 [ext_resource type="Script" uid="uid://cntlrtrft0pko" path="res://Entities/Player/Player.cs" id="2_kyqiw"]
-[ext_resource type="Texture2D" uid="uid://dk56ll007356m" path="res://test_assets/IMG_2338.png" id="3_jynvv"]
+[ext_resource type="Texture2D" uid="uid://mhbdagrwwdes" path="res://test_assets/IMG_2338.png" id="3_jynvv"]
 [ext_resource type="AudioStream" uid="uid://co5q6km0voj7t" path="res://Audio/fantasy-game-sword-cut-sound-effect-2-get-more-on-my-patreon-339823.mp3" id="4_nn08x"]
 [ext_resource type="Script" uid="uid://chbkqgvtx86y3" path="res://Scripts/Components/Hitbox.cs" id="4_yoq75"]
 [ext_resource type="AudioStream" uid="uid://dxf454s303u5r" path="res://Audio/Minecraft Damage (Oof) - QuickSounds.com.mp3" id="5_bhhdu"]
-[ext_resource type="Texture2D" uid="uid://dytoa5yx25k1h" path="res://test_assets/character/idle.png" id="5_samso"]
-[ext_resource type="Texture2D" uid="uid://6j1w5ampe2fh" path="res://test_assets/character/Walk 2.png" id="6_hl213"]
-[ext_resource type="Texture2D" uid="uid://bpft72hutkqg2" path="res://test_assets/character/jump.png" id="7_e34i1"]
+[ext_resource type="Texture2D" uid="uid://dg117wacbdo0" path="res://test_assets/character/idle.png" id="5_samso"]
+[ext_resource type="Texture2D" uid="uid://c40puy5wjpfa2" path="res://test_assets/character/Walk 2.png" id="6_hl213"]
+[ext_resource type="Texture2D" uid="uid://bnn32ifj87slo" path="res://test_assets/character/jump.png" id="7_e34i1"]
 [ext_resource type="Script" uid="uid://cwvf276dmm55a" path="res://Scripts/Components/HealthComponent.cs" id="8_bhhdu"]
-[ext_resource type="Texture2D" uid="uid://b5q5xmx7fggw1" path="res://test_assets/character/run.png" id="8_hl213"]
-[ext_resource type="Texture2D" uid="uid://c0blhsbpc2awb" path="res://test_assets/character/dash.png" id="9_5m37j"]
-[ext_resource type="Texture2D" uid="uid://b5axi6j3jitp3" path="res://test_assets/character/wall slide.png" id="9_e34i1"]
+[ext_resource type="Texture2D" uid="uid://bw3rqy5x25wvb" path="res://test_assets/character/run.png" id="8_hl213"]
+[ext_resource type="Texture2D" uid="uid://cpe68aokei8bg" path="res://test_assets/character/dash.png" id="9_5m37j"]
+[ext_resource type="Texture2D" uid="uid://bp10ylxdl0ok6" path="res://test_assets/character/wall slide.png" id="9_e34i1"]
+[ext_resource type="Texture2D" uid="uid://bieb1wtp8arhg" path="res://test_assets/character/seat.png" id="9_h6pxy"]
 [ext_resource type="Script" uid="uid://m8sy74p7444o" path="res://Scripts/Components/Hurtbox.cs" id="9_megsn"]
+[ext_resource type="Texture2D" uid="uid://btxu1pk05fo5p" path="res://test_assets/character/standup.png" id="10_l80rc"]
 [ext_resource type="AudioStream" uid="uid://bnvrfera0dt0m" path="res://Audio/jump copy.wav" id="11_samso"]
 [ext_resource type="AudioStream" uid="uid://50l5y7tin5l" path="res://Audio/mixkit-footsteps-through-the-wastelands-540.wav" id="12_hl213"]
 [ext_resource type="Script" uid="uid://cf11ensymbuke" path="res://Scripts/UI/HealthUI.cs" id="12_lmeus"]
@@ -190,6 +192,46 @@ region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5sx84"]
 atlas = ExtResource("8_hl213")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4a5a1"]
+atlas = ExtResource("9_h6pxy")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sauhj"]
+atlas = ExtResource("9_h6pxy")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x77tl"]
+atlas = ExtResource("9_h6pxy")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51bc0"]
+atlas = ExtResource("9_h6pxy")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b57am"]
+atlas = ExtResource("9_h6pxy")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lx0j2"]
+atlas = ExtResource("10_l80rc")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swuhc"]
+atlas = ExtResource("10_l80rc")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_onliw"]
+atlas = ExtResource("10_l80rc")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdhxe"]
+atlas = ExtResource("10_l80rc")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hfdh"]
+atlas = ExtResource("10_l80rc")
 region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vcmon"]
@@ -425,6 +467,46 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_4a5a1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sauhj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x77tl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51bc0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b57am")
+}],
+"loop": false,
+"name": &"sit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lx0j2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swuhc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_onliw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mdhxe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7hfdh")
+}],
+"loop": false,
+"name": &"stand_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_vcmon")
 }, {
 "duration": 1.0,
@@ -447,7 +529,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 8.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -501,7 +583,7 @@ DashDuration = 0.1
 position = Vector2(0, -1)
 scale = Vector2(0.98975, 0.98975)
 sprite_frames = SubResource("SpriteFrames_5v66d")
-animation = &"fall"
+animation = &"stand_up"
 speed_scale = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=198253032]

@@ -59,6 +59,8 @@ public partial class Player : CharacterBody2D
 	private bool _isDashing = false;
 	private bool _dashAvailableInAir = true;
 	private bool _isWallSliding = false;
+	private bool _isSitting = false;
+	private bool _isStandingUp = false;
 
 	private int _jumpCount = 0;
 	private float _stunTimer = 0.0f;
@@ -126,6 +128,19 @@ public partial class Player : CharacterBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_isDead) return;
+
+		if (_isSitting)
+		{
+			// Якщо натиснули ВГОРУ -> Встаємо
+			if (Input.IsActionJustPressed("ui_up") || Input.IsActionJustPressed("jump"))
+			{
+				StandUp();
+			}
+			
+			// Зупиняємо гравітацію і рух, поки сидимо
+			Velocity = Vector2.Zero;
+			return; // <--- ВАЖЛИВО: Ми виходимо з функції, щоб інший код руху не працював
+		}
 
 		Vector2 velocity = Velocity;
 		float fDelta = (float)delta;
@@ -331,6 +346,51 @@ public partial class Player : CharacterBody2D
 		UpdateAnimation(direction, velocity);
 		Velocity = velocity;
 		MoveAndSlideWithContactDamage();
+	}
+
+// Цей метод викликає Багаття
+	public void StartSitting(Vector2 targetPos, int directionToFace)
+	{
+		if (_isSitting || _isAttacking || _isDashing || !IsOnFloor()) return;
+
+		_isSitting = true;
+		Velocity = Vector2.Zero; // Зупиняємо фізику
+
+		// 1. Поворот до вогню
+		// Якщо вогонь справа (1), а ми дивимось вліво (FlipH=true), то FlipH = false
+		if (directionToFace != 0)
+		{
+			_animatedSprite.FlipH = (directionToFace < 0);
+		}
+
+		// 2. Плавне переміщення на точку сидіння (Tween)
+		// Щоб гравець не телепортувався різко, а "підсунувся"
+		Tween tween = CreateTween();
+		tween.TweenProperty(this, "global_position", targetPos, 0.2f);
+
+		// 3. Запуск анімації
+		_animatedSprite.Play("sit");
+	}
+
+	private async void StandUp()
+	{
+		// Якщо ми вже встаємо, не запускаємо це знову
+		if (_isStandingUp) return;
+		
+		_isStandingUp = true;
+
+		// 1. Запускаємо анімацію вставання
+		_animatedSprite.Play("stand_up");
+
+		// 2. МАГІЯ: Чекаємо тут, поки анімація не закінчиться
+		// У цей час _isSitting все ще true, тому гравець не може рухатись (що нам і треба)
+		await ToSignal(_animatedSprite, "animation_finished");
+
+		// 3. Анімація закінчилась - відпускаємо гравця
+		_isStandingUp = false;
+		_isSitting = false;
+		
+		// Тепер UpdateAnimation сам увімкне idle, бо ми стоїмо на місці
 	}
 
 	public override void _Process(double delta)

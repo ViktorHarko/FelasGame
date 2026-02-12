@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://neunuwbimyhh"
-path="res://.godot/imported/Knight_B.png-f4dcde80c56ab8f0641192bbaee82192.ctex"
+uid="uid://b8vrib48wo3c4"
+path="res://.godot/imported/campfire new.png-6694716b5e42b2e808ab02a33a2476e0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test_assets/Knight_B.png"
-dest_files=["res://.godot/imported/Knight_B.png-f4dcde80c56ab8f0641192bbaee82192.ctex"]
+source_file="res://test_assets/campfire new.png"
+dest_files=["res://.godot/imported/campfire new.png-6694716b5e42b2e808ab02a33a2476e0.ctex"]
 
 [params]
 
